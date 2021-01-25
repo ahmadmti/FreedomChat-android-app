@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/RippleEffect"
+    android:elevation="0dp"
+    app:cardMaxElevation="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:id="@+id/cl_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="@dimen/_10sdp">
+
+            <ImageView
+                android:scaleType="fitXY"
+                android:id="@+id/iv_profile_image"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:src="@drawable/img_place_holder"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/BlackText"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="User Name"
+                android:textSize="@dimen/text_normal"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/doc"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/layout_msg_unread_count"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:visibility="visible"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/iv_user_check"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    app:srcCompat="@drawable/ic_check_circle"
+                    android:tint="@color/colorTheme"
+                    />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

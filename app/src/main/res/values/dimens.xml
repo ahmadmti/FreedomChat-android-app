@@ -1,0 +1,17 @@
+<resources>
+
+    <dimen name="elevation">8dp</dimen>
+    <dimen name="card_corner_radius">@dimen/_10sdp</dimen>
+
+    <dimen name="text_xxLarge">@dimen/_20sdp</dimen>
+    <dimen name="text_xLarge">@dimen/_18sdp</dimen>
+    <dimen name="text_large">@dimen/_16sdp</dimen>
+    <dimen name="text_normal">@dimen/_14sdp</dimen>
+    <dimen name="text_mini">@dimen/_12sdp</dimen>
+    <dimen name="text_xMini">@dimen/_10sdp</dimen>
+    <dimen name="text_xxMini">@dimen/_8sdp</dimen>
+
+    <dimen name="text_btn">@dimen/_15sdp</dimen>
+    <dimen name="text_field">@dimen/_14sdp</dimen>
+
+</resources>

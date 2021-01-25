@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/docAct_btn_addNew"
+    android:background="@color/colorTheme">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:padding="@dimen/_20sdp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rec_top_rounded"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:id="@+id/cl_item_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0dp"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="@dimen/_10sdp">
+
+                    <ImageView
+                        android:scaleType="fitXY"
+                        android:id="@+id/iv_profile_image"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:src="@drawable/img_place_holder"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:gravity="center|start"
+                    android:paddingStart="@dimen/_10sdp"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/BlackText"
+                        android:gravity="center"
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="User Name"
+                        android:textSize="@dimen/text_large"
+                        />
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/tv_user_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+923012346678"
+                        android:textSize="@dimen/text_mini"
+                        />
+
+
+                    <TextView
+                        android:gravity="center"
+                        android:id="@+id/tv_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="user@test.com"
+                        android:textSize="@dimen/text_mini"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
