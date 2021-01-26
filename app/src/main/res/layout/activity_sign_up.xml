@@ -5,9 +5,9 @@
 
     <data>
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+                <variable
+                    name="viewModel"
+                    type="com.geeklone.freedom_gibraltar.viewmodel.SignUpViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -70,6 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:error="@{viewModel.errorField}"
+                app:errorEnabled="@{viewModel.isEmpty}"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@android:color/transparent">
 
@@ -82,7 +84,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                   />
+                    android:text="@={viewModel.name}"   />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,6 +92,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:error="@{viewModel.errorField}"
+                app:errorEnabled="@{viewModel.isEmpty}"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@android:color/transparent">
 
@@ -102,7 +106,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLines="1"
-                    />
+                    android:text="@={viewModel.mobile}"   />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,6 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:error="@{viewModel.errorEmail}"
+                app:errorEnabled="@{viewModel.isEmailValid}"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@android:color/transparent">
 
@@ -123,7 +129,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                      />
+                    android:text="@={viewModel.email}"   />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,6 +138,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                app:error="@{viewModel.errorPassword}"
+                app:errorEnabled="@{viewModel.isPasswordValid}"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@android:color/transparent">
 
@@ -144,7 +152,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    />
+                    android:text="@={viewModel.password}"  />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,6 +164,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:onClick="@{()-> viewModel.onSignUpClicked()}"
         app:layout_anchor="@id/ll_top_layout"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_marginEnd="@dimen/_20sdp"
@@ -191,7 +200,7 @@
             <TextView
                 android:padding="@dimen/_10sdp"
                 android:layout_alignParentEnd="true"
-                android:id="@+id/loginAct_tv_signup"
+                android:id="@+id/tv_sign_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign In"

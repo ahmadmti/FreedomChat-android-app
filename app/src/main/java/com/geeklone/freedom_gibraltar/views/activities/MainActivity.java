@@ -1,5 +1,6 @@
 package com.geeklone.freedom_gibraltar.views.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -7,18 +8,28 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.geeklone.freedom_gibraltar.R;
+import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
+import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     Context context = this;
     AppBarConfiguration mAppBarConfiguration;
-    SessionManager sessionManager = new SessionManager(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,4 +71,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }

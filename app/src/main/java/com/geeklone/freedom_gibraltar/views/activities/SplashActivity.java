@@ -17,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
     Context context = this;
     SessionManager sessionManager = new SessionManager(this);
 
-    final int SPLASH_TIME_OUT = 1500;
+    final int SPLASH_TIME_OUT = 1000;
 
 
     @Override
@@ -25,8 +25,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Utils.navigateClearTo(context, MainActivityAdmin.class);
-//        delayScreen();
+//        Utils.navigateClearTo(context, LoginActivity.class);
+        delayScreen();
     }
 
     private void delayScreen() {
@@ -42,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         if (sessionManager.getIsLoggedIn()) {
             if (sessionManager.getIsAdmin())
                 Utils.navigateClearTo(context, MainActivityAdmin.class);
-            else Utils.navigateClearTo(context, MainActivity.class);
+            else Utils.navigateClearTo(context, MainActivityAdmin.class);
         } else Utils.navigateClearTo(context, LoginActivity.class);
     }
 }

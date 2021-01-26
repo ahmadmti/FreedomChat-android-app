@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+                <variable
+                    name="viewModel"
+                    type="com.geeklone.freedom_gibraltar.viewmodel.LoginViewModel" />
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -74,6 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:theme="@style/TextInputLayoutAppearance"
+                app:error="@{viewModel.errorEmail}"
+                app:errorEnabled="@{viewModel.isEmailValid}"
                 app:boxBackgroundColor="@android:color/transparent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -85,7 +86,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    />
+                    android:text="@={viewModel.email}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,6 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:theme="@style/TextInputLayoutAppearance"
+                app:error="@{viewModel.errorPassword}"
+                app:errorEnabled="@{viewModel.isPasswordValid}"
                 app:boxBackgroundColor="@android:color/transparent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -106,7 +109,7 @@
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    />
+                    android:text="@={viewModel.password}"     />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +120,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:onClick="dologin"
+        android:onClick="@{()-> viewModel.onLoginClicked()}"
         app:layout_anchor="@id/ll_top_layout"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_marginEnd="@dimen/_20sdp"
@@ -151,10 +154,9 @@
             />
 
         <TextView
-            android:onClick="dosignupp"
             android:padding="@dimen/_10sdp"
             android:layout_alignParentEnd="true"
-            android:id="@+id/loginAct_tv_signup"
+            android:id="@+id/tv_sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up"
