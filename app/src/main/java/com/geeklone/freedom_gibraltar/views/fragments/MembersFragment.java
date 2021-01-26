@@ -3,6 +3,7 @@ package com.geeklone.freedom_gibraltar.views.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,37 +12,66 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.geeklone.freedom_gibraltar.R;
+import com.geeklone.freedom_gibraltar.databinding.FragmentMembersBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
 import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.geeklone.freedom_gibraltar.model.Member;
+import com.geeklone.freedom_gibraltar.model.User;
+import com.geeklone.freedom_gibraltar.viewmodel.LoginViewModel;
+import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 import com.geeklone.freedom_gibraltar.views.activities.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UsersFragment extends Fragment {
+import java.util.List;
+
+public class MembersFragment extends Fragment {
 
     String TAG = GroupChatFragment.class.getSimpleName();
     SessionManager sessionManager;
     LoadingDialog loadingDialog;
 
+    FragmentMembersBinding binding;
+    MembersViewModel viewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_users, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_members, container, false);
         setHasOptionsMenu(true); //toolbar item click
         init();
-        return root;
+
+        return binding.getRoot();
+
+
     }
 
     private void init() {
         sessionManager = new SessionManager(getActivity());
         loadingDialog = new LoadingDialog(getActivity());
+
+        viewModel = new ViewModelProvider(this).get(MembersViewModel.class);
+        binding.setLifecycleOwner(this);
+        binding.setViewModel(viewModel);
+        binding.executePendingBindings();
+
+        viewModel.getMembers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                Log.i(TAG, "onChanged: "+ users.get(0).getEmail());
+            }
+        });
     }
 
 

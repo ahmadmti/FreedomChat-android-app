@@ -5,9 +5,9 @@
 
     <data>
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+                <variable
+                    name="viewModel"
+                    type="com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -23,13 +23,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
-        <androidx.recyclerview.widget.RecyclerView
+        <GridView
             android:layout_marginTop="@dimen/_10sdp"
-            android:id="@+id/quizFrag_rv"
+            android:id="@+id/gv_member"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_height="match_parent"
+            android:columnWidth="0dp"
+            android:gravity="center"
+            android:verticalSpacing="@dimen/_10sdp"
+            android:horizontalSpacing="@dimen/_10sdp"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"
+            tools:listitem="@layout/item_member"/>
+
 
 
         <TextView
