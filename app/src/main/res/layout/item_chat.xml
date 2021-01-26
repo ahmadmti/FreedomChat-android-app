@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <!--        <variable-->
+        <!--            name="viewModel"-->
+        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+    </data>
+
+<androidx.cardview.widget.CardView
     android:layout_margin="@dimen/_5sdp"
     app:cardCornerRadius="@dimen/_5sdp"
     style="@style/RippleEffect"
@@ -118,3 +128,4 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+</layout>

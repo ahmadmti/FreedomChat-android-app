@@ -130,5 +130,12 @@ public class SessionManager {
         return getSharedPreferences().getString(TOKEN, null);
     }
 
+    public void setIsAdmin(boolean flag) {
+        getPreferencesEditor().putBoolean(IS_ADMIN_LOGIN, flag).commit();
+    }
+
+    public boolean getIsAdmin() {
+        return getSharedPreferences().getBoolean(IS_ADMIN_LOGIN, true);
+    }
 
 }

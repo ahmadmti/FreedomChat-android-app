@@ -29,7 +29,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.geeklone.freedom_gibraltar.MainActivity;
+import com.geeklone.freedom_gibraltar.views.activities.MainActivity;
 import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,15 +48,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class Utils {
-    public static String BASE_URL = "http://khadamaatek.geeklone.com/";
-
-    public static final int HTTP_OK = 200;
-    public static final int HTTP_CREATED = 201;
-    public static final int HTTP_NO_CONTENT = 204;
-    public static final int HTTP_BAD_REQUEST = 400;
-    public static final int HTTP_UNAUTHORIZED = 401;
-    public static final int HTTP_NOT_FOUND = 404;
-    public static final int HTTP_SERVER_ERROR = 500;
 
     public static final String PENDING = "1";
     public static final String IN_PROCESS = "2";
@@ -66,7 +57,6 @@ public class Utils {
 
     public static String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z-]+\\.+[a-z]+";
 
-    public static final String DEFAULT_LOCATE = "en";  //en/ar
 
     /**
      * show toast
@@ -109,7 +99,6 @@ public class Utils {
         context.startActivity(new Intent(context, destination)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
-
 
 
     /**

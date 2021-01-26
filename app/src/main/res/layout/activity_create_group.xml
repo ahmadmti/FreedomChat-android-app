@@ -1,128 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_above="@+id/docAct_btn_addNew"
-    android:background="@color/colorTheme">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <data>
+
+        <!--        <variable-->
+        <!--            name="viewModel"-->
+        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:background="@color/colorTheme">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_rec_top_rounded"
-            android:orientation="vertical"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
             <LinearLayout
-                android:padding="@dimen/_20sdp"
-                android:id="@+id/cl_item_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:elevation="0dp"
-                    app:cardCornerRadius="@dimen/_10sdp"
-                    app:cardElevation="0dp">
-
-                    <ImageView
-                        android:id="@+id/iv_group_image"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_50sdp"
-                        android:padding="@dimen/_10sdp"
-                        android:src="@drawable/ic_camera" />
-
-                </androidx.cardview.widget.CardView>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rec_top_rounded"
+                android:orientation="vertical">
 
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:orientation="vertical"
-                    android:paddingStart="@dimen/_5sdp">
+                    android:id="@+id/cl_item_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_20sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/TextInputLayoutAppearance"
-                        app:boxBackgroundColor="@android:color/transparent">
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:elevation="0dp"
+                        app:cardCornerRadius="@dimen/_10sdp"
+                        app:cardElevation="0dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_group_name"
+                        <ImageView
+                            android:id="@+id/iv_group_image"
+                            android:layout_width="@dimen/_50sdp"
+                            android:layout_height="@dimen/_50sdp"
+                            android:padding="@dimen/_10sdp"
+                            android:src="@drawable/ic_camera" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/_5sdp">
+
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="Group Name"
-                            android:imeOptions="actionNext"
-                            android:inputType="textPersonName"
-                            android:maxLines="1"
-                            android:text="@={viewModel.userEmail}" />
+                            android:theme="@style/TextInputLayoutAppearance"
+                            app:boxBackgroundColor="@android:color/transparent">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_group_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="Group Name"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPersonName"
+                                android:maxLines="1"
+                               />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+
 
 
                 </LinearLayout>
 
 
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rec_top_rounded"
-                android:backgroundTint="@color/colorSilver"
-                android:orientation="vertical"
-               >
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:paddingTop="@dimen/_10sdp"
-                    android:id="@+id/rv_group_members"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    />
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rec_top_rounded"
+                    android:backgroundTint="@color/colorSilver"
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_group_members"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/_10sdp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
         </LinearLayout>
 
-
-    </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_margin="@dimen/_20sdp"
-        android:layout_gravity="bottom|right"
-        android:id="@+id/fab_create_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
-        android:scaleType="center"
-        android:src="@drawable/ic_arrow_forward_send"
-        app:tint="@color/white"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
-        app:fabCustomSize="@dimen/_50sdp"
-        app:maxImageSize="@dimen/_24sdp"
-        />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_create_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/_20sdp"
+            android:backgroundTint="@color/colorTheme"
+            android:scaleType="center"
+            android:src="@drawable/ic_arrow_forward_send"
+            app:borderWidth="0dp"
+            app:fabCustomSize="@dimen/_50sdp"
+            app:fabSize="normal"
+            app:maxImageSize="@dimen/_24sdp"
+            app:tint="@color/white" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

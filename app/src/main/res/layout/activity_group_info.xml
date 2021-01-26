@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <!--        <variable-->
+        <!--            name="viewModel"-->
+        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_above="@+id/docAct_btn_addNew"
     android:background="@color/colorTheme">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
 
         <LinearLayout
             android:padding="@dimen/_20sdp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/shape_rec_top_rounded"
             android:orientation="vertical"
@@ -74,7 +80,7 @@
                             android:drawableTint="@color/colorThemeLight"
                             android:inputType="textPersonName"
                             android:maxLines="1"
-                            android:text="@={viewModel.userEmail}" />
+                           />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -205,7 +211,6 @@
         </LinearLayout>
 
 
-        </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         app:layout_anchorGravity="bottom|end"
@@ -224,3 +229,4 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

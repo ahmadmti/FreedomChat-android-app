@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <!--        <variable-->
+        <!--            name="viewModel"-->
+        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_above="@+id/docAct_btn_addNew"
@@ -22,7 +32,8 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_launcher_background"
+                app:srcCompat="@drawable/logo"
+                android:scaleType="fitStart"
                 />
 
             <TextView
@@ -71,7 +82,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:text="@={viewModel.userEmail}" />
+                   />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +102,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:text="@={viewModel.userEmail}" />
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +123,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="@={viewModel.userEmail}" />
+                      />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,9 +144,10 @@
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:text="@={viewModel.userPassword}" />
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
 
         </LinearLayout>
@@ -150,7 +162,7 @@
         android:id="@+id/fab_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
+        android:backgroundTint="@color/colorThemeLight"
         android:scaleType="center"
         android:src="@drawable/ic_arrow_forward_send"
         app:tint="@color/white"
@@ -160,5 +172,33 @@
         app:maxImageSize="@dimen/_24sdp"
         />
 
+        <RelativeLayout
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/_20sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account?"
+                android:textColor="@color/colorTheme"
+                android:textSize="@dimen/text_normal"
+                />
+
+            <TextView
+                android:padding="@dimen/_10sdp"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/loginAct_tv_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textSize="@dimen/text_normal"
+                />
+
+        </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
