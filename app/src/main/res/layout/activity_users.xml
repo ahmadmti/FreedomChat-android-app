@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel" />
+    </data>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.activities.UsersActivity"
+        android:background="@color/colorTheme">
+
+    <RelativeLayout
+        android:background="@drawable/shape_rec_top_rounded"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:paddingTop="@dimen/_5sdp"
+            android:id="@+id/rv_users"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_user"/>
+
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:id="@+id/tv_not_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No user registered yet"
+            />
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

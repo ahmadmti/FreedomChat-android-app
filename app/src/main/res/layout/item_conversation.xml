@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="model"
+            type="com.geeklone.freedom_gibraltar.model.Conversation" />
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+        <variable
+            name="viewModel"
+            type="com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel" />
     </data>
 
 <LinearLayout
@@ -24,13 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="EEEE, hh:mm a"
-        android:textSize="@dimen/text_mini" />
+        android:textSize="@dimen/text_xMini" />
 
     <LinearLayout
         android:weightSum="5.5"
         android:layout_marginBottom="@dimen/_10sdp"
         android:id="@+id/chatItem_layout_receiver"
-        android:visibility="visible"
+        android:visibility="@{model.from.equals() ? View.GONE : View.VISIBLE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -47,6 +50,7 @@
             android:layout_height="wrap_content">
 
                 <TextView
+                    android:visibility="gone"
                     android:text="Receiving User "
                     android:textColor="@color/white"
                     android:id="@+id/tv_receiving_user_name"
@@ -56,7 +60,7 @@
 
                 <TextView
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Message..."
+                    android:text="@={model.msg}"
                     android:textColor="@color/black"
                     android:id="@+id/tv_receiving_user_msg"
                     android:layout_width="wrap_content"
@@ -75,7 +79,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="hh:mm a"
-            android:textSize="@dimen/text_mini" />
+            android:textSize="@dimen/text_xMini" />
     </LinearLayout>
 
     <LinearLayout
@@ -97,7 +101,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="hh:mm a"
-            android:textSize="@dimen/text_mini" />
+            android:textSize="@dimen/text_xMini" />
 
         <LinearLayout
             android:paddingTop="@dimen/_10sdp"
@@ -112,7 +116,7 @@
 
             <TextView
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="Message..."
+                android:text="@={model.msg}"
                 android:textColor="@color/black"
                 android:id="@+id/tv_sender_user_msg"
                 android:layout_width="wrap_content"

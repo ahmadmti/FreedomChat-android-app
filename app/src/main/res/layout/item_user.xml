@@ -4,26 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+                name="model"
+            type="com.geeklone.freedom_gibraltar.model.User" />
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+        <variable
+            name="viewModel"
+            type="com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel" />
+
     </data>
 
-<androidx.cardview.widget.CardView
-    style="@style/RippleEffect"
-    android:elevation="0dp"
-    app:cardMaxElevation="0dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:onClick="@{(view)-> viewModel.startNewChat(view, model)}"
+        style="@style/RippleEffect"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_10sdp"
+        android:padding="@dimen/_15sdp"
         android:id="@+id/cl_item_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:layout_marginStart="@dimen/_5sdp"
@@ -36,8 +35,8 @@
             <ImageView
                 android:scaleType="fitXY"
                 android:id="@+id/iv_profile_image"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:src="@drawable/img_place_holder"
                 />
 
@@ -58,9 +57,8 @@
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="User Name"
                 android:textSize="@dimen/text_normal"
-                />
+                android:text="@={model.name}"    />
 
 
         </LinearLayout>
@@ -81,7 +79,7 @@
                 android:layout_height="0dp"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     android:layout_centerInParent="true"
                     android:id="@+id/iv_user_check"
                     android:layout_width="@dimen/_20sdp"
@@ -98,5 +96,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
 </layout>

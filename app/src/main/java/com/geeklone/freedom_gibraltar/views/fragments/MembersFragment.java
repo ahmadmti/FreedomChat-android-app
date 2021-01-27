@@ -3,7 +3,6 @@ package com.geeklone.freedom_gibraltar.views.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
@@ -21,13 +19,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.geeklone.freedom_gibraltar.R;
+import com.geeklone.freedom_gibraltar.adapter.GridAdapter;
 import com.geeklone.freedom_gibraltar.databinding.FragmentMembersBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
 import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
-import com.geeklone.freedom_gibraltar.model.Member;
 import com.geeklone.freedom_gibraltar.model.User;
-import com.geeklone.freedom_gibraltar.viewmodel.LoginViewModel;
 import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 import com.geeklone.freedom_gibraltar.views.activities.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +35,7 @@ import java.util.List;
 
 public class MembersFragment extends Fragment {
 
-    String TAG = GroupChatFragment.class.getSimpleName();
+    String TAG = MembersFragment.class.getSimpleName();
     SessionManager sessionManager;
     LoadingDialog loadingDialog;
 
@@ -66,10 +63,14 @@ public class MembersFragment extends Fragment {
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
 
+        loadingDialog.show();
         viewModel.getMembers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                Log.i(TAG, "onChanged: "+ users.get(0).getEmail());
+                loadingDialog.dismiss();
+                if (users.size() > 0)
+                    binding.gvMember.setAdapter(new GridAdapter(getContext(), users));
+                else binding.tvNotFound.setVisibility(View.VISIBLE);
             }
         });
     }

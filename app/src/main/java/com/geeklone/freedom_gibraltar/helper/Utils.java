@@ -56,6 +56,7 @@ public class Utils {
     public static final String CANCELLED = "5";
 
     public static String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z-]+\\.+[a-z]+";
+    public static String FIREBASE_SERVER_KEY = "AAAA043daFo:APA91bEELXiaPKuHpOg5BqUW4A02FXrheoRNpc1HhwhNbbVX3pTAO5gmAEuDyVSm7cH87iD1m-KgpChG1hR-noFCJX1BrX0CuZ7FifAcwI4nKM_2FA8425yJupBnzIjX_oCnNq0_Wt69";
 
 
     /**

@@ -4,8 +4,10 @@ import android.util.Patterns;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable {
 
 
     private String id = "";
@@ -15,8 +17,8 @@ public class User {
     private String password = "";
     private String deviceToken = "";
     private String profileImg = "";
-    private boolean isEnabled = true;
-    private boolean isAdmin = false;
+    private boolean enabled;
+    private boolean admin;
     private String createdDate = "";
 
     public User() {
@@ -92,19 +94,19 @@ public class User {
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+        this.enabled = enabled;
     }
 
     public boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 
     public void setAdmin(boolean admin) {
-        isAdmin = admin;
+        this.admin = admin;
     }
 
     public String getCreatedDate() {

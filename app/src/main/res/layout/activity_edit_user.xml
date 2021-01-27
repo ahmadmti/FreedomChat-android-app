@@ -5,15 +5,14 @@
 
     <data>
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+<!--                <variable-->
+<!--                    name="viewModel"-->
+<!--                    type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_above="@+id/docAct_btn_addNew"
     android:background="@color/colorTheme">
 
     <LinearLayout
@@ -41,11 +40,9 @@
                     android:layout_marginStart="@dimen/_5sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:elevation="0dp"
-                    app:cardElevation="0dp"
                     app:cardCornerRadius="@dimen/_10sdp">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:scaleType="fitXY"
                         android:id="@+id/iv_profile_image"
                         android:layout_width="@dimen/_100sdp"
@@ -65,7 +62,6 @@
 
                     <TextView
                         style="@style/BlackText"
-                        android:gravity="center"
                         android:id="@+id/tv_user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -73,7 +69,6 @@
                         android:textSize="@dimen/text_large"
                         />
                     <TextView
-                        android:gravity="center"
                         android:id="@+id/tv_user_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -83,12 +78,11 @@
 
 
                     <TextView
-                        android:gravity="center"
                         android:id="@+id/tv_user_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="user@test.com"
-                        android:textSize="@dimen/text_mini"
+                        android:textSize="@dimen/text_xMini"
                         />
 
                 </LinearLayout>

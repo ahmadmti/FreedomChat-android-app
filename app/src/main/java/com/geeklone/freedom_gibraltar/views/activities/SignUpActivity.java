@@ -128,8 +128,8 @@ public class SignUpActivity extends AppCompatActivity {
         hashMap.put("password", user.getPassword());
         hashMap.put("deviceToken", deviceToken);
         hashMap.put("profileImg", "");
-        hashMap.put("isEnabled", true);
-        hashMap.put("isAdmin", false);
+        hashMap.put("enabled", true);
+        hashMap.put("admin", false);
         hashMap.put("createdDate", Utils.formatDateTimeFromTS(Utils.getSysTimeStamp(), "yyyy-MM-dd HH:mm:ss"));
 
         return hashMap;

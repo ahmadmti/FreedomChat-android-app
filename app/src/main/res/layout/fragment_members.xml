@@ -21,10 +21,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/_10sdp"
+        android:paddingTop="@dimen/_20sdp">
 
         <GridView
-            android:layout_marginTop="@dimen/_10sdp"
             android:id="@+id/gv_member"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,12 +40,13 @@
 
 
         <TextView
+            android:visibility="invisible"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:id="@+id/tv_notFound"
+            android:id="@+id/tv_not_found"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Not Quiz found"
+            android:text="Not user registered yet!"
             />
 
     </RelativeLayout>

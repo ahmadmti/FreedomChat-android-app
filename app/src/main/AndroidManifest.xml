@@ -14,7 +14,8 @@
         android:theme="@style/Theme.ChatApp"
         tools:ignore="AllowBackup,UnusedAttribute"
         tools:targetApi="q">
-        <activity android:name=".views.activities.MainActivityAdmin"></activity>
+        <activity android:name=".views.activities.UsersActivity"></activity>
+        <activity android:name=".views.activities.MainActivityAdmin" />
         <activity android:name=".views.activities.EditUserActivity" />
         <activity android:name=".views.activities.ConversationActivity" />
         <activity android:name=".views.activities.GroupInfoActivity" />
@@ -53,8 +54,8 @@
             </intent-filter>
         </service>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

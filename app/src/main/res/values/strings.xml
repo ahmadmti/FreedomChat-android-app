@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">ChatApp</string>
+    <string name="app_name">Freedom Gibraltar</string>
+
     <string name="action_search">Search</string>
+    <string name="action_logout">Logout</string>
+
     <string name="menu_chat_room">Chat Room</string>
     <string name="menu_groups">Groups</string>
     <string name="menu_users">Users</string>
-    <string name="action_logout">Logout</string>
 </resources>

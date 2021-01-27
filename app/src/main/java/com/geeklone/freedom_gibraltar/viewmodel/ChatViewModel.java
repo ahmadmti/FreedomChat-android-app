@@ -1,16 +1,16 @@
 package com.geeklone.freedom_gibraltar.viewmodel;
 
 import android.app.Application;
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import com.geeklone.freedom_gibraltar.model.User;
-import com.geeklone.freedom_gibraltar.views.activities.ConversationActivity;
+import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
+import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.geeklone.freedom_gibraltar.model.Chat;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,40 +21,42 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MembersViewModel extends AndroidViewModel {
+public class ChatViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<User>> liveData;
-    List<User> arrayList = new ArrayList<>();
+    private MutableLiveData<List<Chat>> liveData;
+    List<Chat> arrayList= new ArrayList<>();
     Application application;
+    SessionManager sessionManager ;
 
-    public MembersViewModel(@NonNull Application application) {
+    public ChatViewModel(@NonNull Application application) {
         super(application);
-        this.application = application;
+        this.application=application;
     }
 
-
-    public MutableLiveData<List<User>> getMembers() {
+    public MutableLiveData<List<Chat>> getChats() {
         if (liveData == null) {
-            liveData = new MutableLiveData<List<User>>();
-            fetchRecord();
+            liveData = new MutableLiveData<List<Chat>>();
+            sessionManager = new SessionManager(application.getApplicationContext());
+        fetchRecord();
         }
         return liveData;
     }
 
     private void fetchRecord() {
-        FirebaseDatabase.getInstance().getReference("users")
+        FirebaseDatabase.getInstance().getReference("chats").child(sessionManager.getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChildren()) {
                             arrayList.clear();
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                User user = snapshot.getValue(User.class);
-                                arrayList.add(user);
-                            }
-
-                            liveData.setValue(arrayList);
+                           for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                               Chat user = snapshot.getValue(Chat.class);
+                               arrayList.add(user);
+                           }
                         }
+
+                        liveData.setValue(arrayList);
+
                     }
 
                     @Override
@@ -63,13 +65,5 @@ public class MembersViewModel extends AndroidViewModel {
                     }
                 });
     }
-
-    public void startNewChat(View view, User user) {
-        view.getContext().startActivity(new Intent(view.getContext(), ConversationActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra("user", user)
-        );
-    }
-
 }
 

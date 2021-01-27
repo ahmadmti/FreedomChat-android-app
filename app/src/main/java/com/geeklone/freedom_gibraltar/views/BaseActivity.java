@@ -21,19 +21,28 @@ public class BaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected TextView toolbarTitle;
 
-    @Override
-    public void setContentView(int view) {
-        super.setContentView(view);
-        init(view);
-        setupToolbar();
-    }
+    //without mvvm
+//    @Override
+//    public void setContentView(int view) {
+//        super.setContentView(view);
+//        init(view);
+//        setupToolbar();
+//    }
 
-    @SuppressLint("InflateParams")
-    private void init(int view) {
-        LinearLayout fullLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
-        FrameLayout frameLayout = fullLayout.findViewById(R.id.baseActToolbar_frame);
-        getLayoutInflater().inflate(view, frameLayout, true);
-        super.setContentView(fullLayout);
+//    @SuppressLint("InflateParams")
+//    private void init(int view) {
+//        LinearLayout fullLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
+//        FrameLayout frameLayout = fullLayout.findViewById(R.id.baseActToolbar_frame);
+//        getLayoutInflater().inflate(view, frameLayout, true);
+//        super.setContentView(fullLayout);
+//    }
+
+    //used in mvvm
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base);
+        setupToolbar();
     }
 
     private void setupToolbar() {
