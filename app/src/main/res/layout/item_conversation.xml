@@ -25,7 +25,7 @@
         android:layout_margin="@dimen/_15sdp"
         android:id="@+id/tv_msg_date"
         android:layout_width="wrap_content"
-        android:textColor="@color/colorTheme"
+        android:textColor="@color/colorThemeLight"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="@{model.isConversationDateVisibility()? View.VISIBLE : View.GONE}"
@@ -33,6 +33,7 @@
         android:textSize="@dimen/text_xMini" />
 
     <LinearLayout
+        android:layout_marginEnd="@dimen/_40sdp"
         android:weightSum="5.5"
         android:layout_marginBottom="@dimen/_10sdp"
         android:id="@+id/chatItem_layout_receiver"
@@ -42,17 +43,15 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_15sdp"
-            android:paddingStart="@dimen/_20sdp"
-            android:paddingEnd="@dimen/_20sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
             android:background="@drawable/shape_msg_receiver"
-            android:layout_weight="4"
             android:orientation="vertical"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
                 <TextView
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:visibility="gone"
                     android:text="Receiving User "
                     android:textColor="@color/white"
@@ -62,7 +61,7 @@
                     android:textSize="@dimen/text_normal" />
 
                 <TextView
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:text="@={model.msg}"
                     android:textColor="@color/black"
                     android:id="@+id/tv_receiving_user_msg"
@@ -74,20 +73,20 @@
 
 
         <TextView
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_1sdp"
             android:id="@+id/chatItem_msg_receiver"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:gravity="center"
             android:text="@={model.msgTime}"
-            android:textSize="@dimen/text_xMini" />
+            android:textSize="@dimen/text_xxMini" />
     </LinearLayout>
 
     <LinearLayout
         android:gravity="end"
         android:weightSum="5.5"
+        android:layout_marginStart="@dimen/_40sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:visibility="@{model.isSending()? View.VISIBLE : View.GONE}"
         android:id="@+id/chatItem_layout_sender"
@@ -96,29 +95,25 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_1sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:id="@+id/chatItem_msg_sender"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="1"
-            android:gravity="center"
             android:text="@={model.msgTime}"
-            android:textSize="@dimen/text_xMini" />
+            android:textSize="@dimen/text_xxMini" />
 
         <LinearLayout
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_15sdp"
-            android:paddingStart="@dimen/_20sdp"
-            android:paddingEnd="@dimen/_20sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
             android:background="@drawable/shape_msg_sender"
-            android:layout_weight="4"
             android:orientation="vertical"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="@={model.msg}"
                 android:textColor="@color/black"
                 android:id="@+id/tv_sender_user_msg"

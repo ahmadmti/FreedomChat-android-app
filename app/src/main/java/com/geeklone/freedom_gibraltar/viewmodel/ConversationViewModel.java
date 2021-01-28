@@ -41,7 +41,7 @@ public class ConversationViewModel extends AndroidViewModel {
     List<Conversation> arrayList = new ArrayList<>();
     Application application;
     SessionManager sessionManager;
-    DatabaseReference databaseReference, databaseReferenceInfo;
+    DatabaseReference reference;
     User user;
     private String user_msg_key;
     FirebasePush firebasePush;
@@ -54,30 +54,22 @@ public class ConversationViewModel extends AndroidViewModel {
 
     public void init(User user) {
         this.user = user;
+        reference=FirebaseDatabase.getInstance().getReference().child("chats");
+        sessionManager = new SessionManager(application.getApplicationContext());
         initpushNoti();
+        fetchMessages();
     }
 
     public MutableLiveData<DataSnapshot> getConversation() {
         if (liveData == null) {
             liveData = new MutableLiveData<DataSnapshot>();
-            sessionManager = new SessionManager(application.getApplicationContext());
-            fetchMessages();
         }
         return liveData;
     }
 
     private void fetchMessages() {
-        databaseReferenceInfo = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("userInfo");
-        Map<String, Object> userInfo = new HashMap<String, Object>();
-        userInfo.put("chatUserId", user.getId());
-        userInfo.put("chatUserName", user.getName());
-        userInfo.put("chatUserImg", sessionManager.getUserImg());
-        userInfo.put("deviceToken", sessionManager.getDeviceToken());
-        databaseReferenceInfo.updateChildren(userInfo);
-
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("conversation");
-        databaseReference.addChildEventListener(
+        reference.child(sessionManager.getUid()).child(user.getId()).child("conversation")
+                .addChildEventListener(
                 new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -117,9 +109,25 @@ public class ConversationViewModel extends AndroidViewModel {
 //        iv_sendMsg.setVisibility(View.GONE);
 //        progressBar.setVisibility(View.VISIBLE);
 
-        DatabaseReference referenceSender = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("conversation");
-        DatabaseReference referenceReceiver = FirebaseDatabase.getInstance().getReference().child("chats").child(user.getId()).child(sessionManager.getUid()).child("conversation");
+        DatabaseReference  referenceInfoSender = reference.child(sessionManager.getUid()).child(user.getId()).child("userInfo");
+        Map<String, Object> userInfo = new HashMap<String, Object>();
+        userInfo.put("chatUserId", user.getId());
+        userInfo.put("chatUserName", user.getName());
+        userInfo.put("chatUserImg", sessionManager.getUserImg());
+        userInfo.put("deviceToken", sessionManager.getDeviceToken());
+        referenceInfoSender.updateChildren(userInfo);
 
+        DatabaseReference  referenceInfoReceiver = reference.child(user.getId()).child(sessionManager.getUid()).child("userInfo");
+        userInfo = new HashMap<String, Object>();
+        userInfo.put("chatUserId", sessionManager.getUserID());
+        userInfo.put("chatUserName", sessionManager.getUserName());
+        userInfo.put("chatUserImg", user.getProfileImg());
+        userInfo.put("deviceToken", user.getDeviceToken());
+        referenceInfoReceiver.updateChildren(userInfo);
+
+
+        DatabaseReference referenceSender = reference.child(sessionManager.getUid()).child(user.getId()).child("conversation");
+        DatabaseReference referenceReceiver = reference.child(user.getId()).child(sessionManager.getUid()).child("conversation");
 
         //payload
         Map<String, Object> map = new HashMap<String, Object>();
@@ -147,9 +155,12 @@ public class ConversationViewModel extends AndroidViewModel {
                         if (task.isSuccessful()) {
 //                            iv_sendMsg.setVisibility(View.VISIBLE);
 //                            progressBar.setVisibility(View.GONE);
-                            databaseReferenceInfo.child("lastMsg").setValue( msg.getValue().trim());
-                            databaseReferenceInfo.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
-                            databaseReferenceInfo.child("msgRead").setValue(false);
+                            referenceInfoSender.child("lastMsg").setValue(msg.getValue().trim());
+                            referenceInfoSender.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+
+                            referenceInfoReceiver.child("lastMsg").setValue(msg.getValue().trim());
+                            referenceInfoReceiver.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+                            referenceInfoReceiver.child("msgRead").setValue(false);
 
                             msg.setValue("");
 

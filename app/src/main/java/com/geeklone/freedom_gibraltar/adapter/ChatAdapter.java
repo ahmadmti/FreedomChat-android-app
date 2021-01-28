@@ -108,9 +108,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         }
 
         public void bind(Chat item, int position) {
-            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getUpdatedDate()), "hh:mm a");
-            item.setMsgDateTime(msgTime);
-
+            if (!item.getUpdatedDate().isEmpty()) {
+                String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getUpdatedDate()), "hh:mm a");
+                item.setMsgDateTime(msgTime);
+            }
             binding.setModel(item);
 //            binding.setPosition(position); // pass position to the layout
             binding.setViewModel(viewModel);

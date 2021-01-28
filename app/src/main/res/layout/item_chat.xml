@@ -17,6 +17,7 @@
 
     <LinearLayout
         style="@style/RippleEffect"
+        android:onClick="@{(view)-> viewModel.startChat(view, model)}"
         android:orientation="horizontal"
         android:padding="@dimen/_15sdp"
         android:id="@+id/cl_item_container"

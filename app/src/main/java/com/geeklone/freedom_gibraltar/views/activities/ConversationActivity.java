@@ -2,8 +2,10 @@ package com.geeklone.freedom_gibraltar.views.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,11 +15,15 @@ import com.geeklone.freedom_gibraltar.adapter.ConversationAdapter;
 import com.geeklone.freedom_gibraltar.databinding.ActivityConversationBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.geeklone.freedom_gibraltar.model.Chat;
 import com.geeklone.freedom_gibraltar.model.Conversation;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel;
 import com.geeklone.freedom_gibraltar.views.BaseActivity;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +60,29 @@ public class ConversationActivity extends BaseActivity {
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
 
-        user = (User) getIntent().getSerializableExtra("user");
-        super.setupToolbar(user.getName());
-        viewModel.init(user);
+        if (getIntent().hasExtra("chat")) {
+            Chat chat = (Chat) getIntent().getSerializableExtra("chat");
+            super.setupToolbar(chat.getChatUserName());
+            FirebaseDatabase.getInstance().getReference("users").child(chat.getChatUserId())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Log.i(TAG, "onDataChange: "+ snapshot);
+                            user = snapshot.getValue(User.class);
+                            viewModel.init(user);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+        } else {
+            user = (User) getIntent().getSerializableExtra("user");
+            super.setupToolbar(user.getName());
+            viewModel.init(user);
+        }
 
         adapter = new ConversationAdapter(context, arrayList, viewModel);
 
@@ -93,4 +119,10 @@ public class ConversationActivity extends BaseActivity {
         binding.rvConversation.scrollToPosition(adapter.getItemCount() - 1);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId())
+                .child("userInfo").child("msgRead").setValue(true);
+    }
 }

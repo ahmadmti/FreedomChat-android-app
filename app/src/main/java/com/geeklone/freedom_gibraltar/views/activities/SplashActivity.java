@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Utils.navigateClearTo(context, MainActivityAdmin.class);
+//        Utils.navigateClearTo(context, MainActivityAdmin.class);
         delayScreen();
     }
 

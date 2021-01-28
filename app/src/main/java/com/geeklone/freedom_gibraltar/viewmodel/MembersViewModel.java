@@ -1,5 +1,6 @@
 package com.geeklone.freedom_gibraltar.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
@@ -74,6 +75,7 @@ public class MembersViewModel extends AndroidViewModel {
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra("user", user)
         );
+        ((Activity)view.getContext()).finish();
     }
 
 }

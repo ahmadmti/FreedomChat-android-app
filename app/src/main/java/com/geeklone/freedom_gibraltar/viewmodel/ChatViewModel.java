@@ -1,7 +1,9 @@
 package com.geeklone.freedom_gibraltar.viewmodel;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -9,6 +11,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Chat;
+import com.geeklone.freedom_gibraltar.model.User;
+import com.geeklone.freedom_gibraltar.views.activities.ConversationActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -66,5 +70,13 @@ public class ChatViewModel extends AndroidViewModel {
                     }
                 });
     }
+
+    public void startChat(View view, Chat chat) {
+        view.getContext().startActivity(new Intent(view.getContext(), ConversationActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra("chat", chat)
+        );
+    }
+
 }
 
