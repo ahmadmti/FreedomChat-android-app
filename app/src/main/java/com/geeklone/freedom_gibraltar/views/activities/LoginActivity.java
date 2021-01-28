@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChildren()) {
-                            if (!dataSnapshot.child("isEnabled").getValue(Boolean.class)) {
+                            if (!dataSnapshot.child("enabled").getValue(Boolean.class)) {
                                 Utils.showToast(context, "Account disabled! Please contact to the administrator");
                             } else {
                                 dataSnapshot.getRef().child("deviceToken").setValue(deviceToken); //add device token on login
@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager.setUserMobile(user.getMobile());
         sessionManager.setUserEmail( user.getEmail());
         sessionManager.setUserPwd(user.getPassword());
-        sessionManager.setUserImg(user.getEmail());
+        sessionManager.setUserImg(user.getProfileImg());
         sessionManager.setDeviceToken(deviceToken);
         sessionManager.setIsAdmin(user.isAdmin());
         sessionManager.setIsLoggedIn(true);

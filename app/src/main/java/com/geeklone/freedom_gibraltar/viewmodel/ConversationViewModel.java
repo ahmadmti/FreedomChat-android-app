@@ -67,20 +67,23 @@ public class ConversationViewModel extends AndroidViewModel {
     }
 
     private void fetchMessages() {
-        Log.i("TAG", "sessionManager: " + sessionManager.getUid());
-        Log.i("TAG", "user.getId(): " + user.getId());
+        databaseReferenceInfo = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("userInfo");
+        Map<String, Object> userInfo = new HashMap<String, Object>();
+        userInfo.put("chatUserId", user.getId());
+        userInfo.put("chatUserName", user.getName());
+        userInfo.put("chatUserImg", sessionManager.getUserImg());
+        userInfo.put("deviceToken", sessionManager.getDeviceToken());
+        databaseReferenceInfo.updateChildren(userInfo);
+
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("conversation");
-
-
         databaseReference.addChildEventListener(
                 new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Log.i("TAG", "onChildAdded: " + dataSnapshot.getChildren());
-//                if (dataSnapshot.exists()) {
-//                    liveData.setValue(dataSnapshot);
-//                }
-                        liveData.setValue(dataSnapshot);
+                        if (dataSnapshot.exists()) {
+                            liveData.setValue(dataSnapshot);
+                        }
                     }
 
                     @Override
@@ -114,30 +117,40 @@ public class ConversationViewModel extends AndroidViewModel {
 //        iv_sendMsg.setVisibility(View.GONE);
 //        progressBar.setVisibility(View.VISIBLE);
 
+        DatabaseReference referenceSender = FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId()).child("conversation");
+        DatabaseReference referenceReceiver = FirebaseDatabase.getInstance().getReference().child("chats").child(user.getId()).child(sessionManager.getUid()).child("conversation");
+
 
         //payload
         Map<String, Object> map = new HashMap<String, Object>();
-        user_msg_key = databaseReference.push().getKey();
-        databaseReference.updateChildren(map);
+        user_msg_key = referenceSender.push().getKey();
 
-        DatabaseReference dbr2 = databaseReference.child(user_msg_key);
-        Map<String, Object> map2 = new HashMap<String, Object>();
-        map2.put("id", user_msg_key);
-        map2.put("msg", msg.getValue().trim());
-        map2.put("msgTime", String.valueOf(Utils.getSysTimeStamp()));
-        map2.put("msgType", "text");
-        map2.put("name", sessionManager.getUserName());
-        map2.put("from", sessionManager.getUserID());
+        referenceSender.updateChildren(map);
+        referenceReceiver.updateChildren(map);
 
-        Log.e(TAG, "sendMessage: " );
-        dbr2.updateChildren(map2)
+
+        DatabaseReference dbrSender = referenceSender.child(user_msg_key);
+        DatabaseReference dbrReceiver = referenceReceiver.child(user_msg_key);
+        Map<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("id", user_msg_key);
+        hashMap.put("msg", msg.getValue().trim());
+        hashMap.put("timeStamp", String.valueOf(Utils.getSysTimeStamp()));
+        hashMap.put("msgType", "text");
+        hashMap.put("name", sessionManager.getUserName());
+        hashMap.put("from", sessionManager.getUserID());
+
+        Log.e(TAG, "sendMessage: ");
+        dbrSender.updateChildren(hashMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-//                            databaseReferenceInfo.child("lastMessage").setValue(msg.getValue().trim());
 //                            iv_sendMsg.setVisibility(View.VISIBLE);
 //                            progressBar.setVisibility(View.GONE);
+                            databaseReferenceInfo.child("lastMsg").setValue( msg.getValue().trim());
+                            databaseReferenceInfo.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+                            databaseReferenceInfo.child("msgRead").setValue(false);
+
                             msg.setValue("");
 
                             //send Notification
@@ -149,7 +162,7 @@ public class ConversationViewModel extends AndroidViewModel {
                         } else
                             Utils.showToast(application.getApplicationContext(), "Message sending failed");
 
-                        Log.e(TAG, "sendMessage: "+ task.getResult() );
+                        Log.e(TAG, "sendMessage: " + task.getResult());
 
                     }
                 })
@@ -159,10 +172,12 @@ public class ConversationViewModel extends AndroidViewModel {
                         Utils.showToast(application.getApplicationContext(), "Message sending failed");
 //                        iv_sendMsg.setVisibility(View.VISIBLE);
 //                        progressBar.setVisibility(View.GONE);
-                        Log.e(TAG, "sendMessage: "+ e.getMessage() );
+                        Log.e(TAG, "sendMessage: " + e.getMessage());
 
                     }
                 });
+
+        dbrReceiver.updateChildren(hashMap);
 
     }
 

@@ -2,6 +2,7 @@ package com.geeklone.freedom_gibraltar.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -12,8 +13,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeklone.freedom_gibraltar.R;
-import com.geeklone.freedom_gibraltar.databinding.ActivityConversationBinding;
 import com.geeklone.freedom_gibraltar.databinding.ItemConversationBinding;
+import com.geeklone.freedom_gibraltar.helper.Utils;
+import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
 import com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel;
 
@@ -29,15 +31,17 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     Context context;
     List<Conversation> arrayList;
     List<Conversation> arrayListFull;
-
+    SessionManager sessionManager;
     ConversationViewModel viewModel;
     ItemConversationBinding binding;
+    static String date;
 
     public ConversationAdapter(Context context, List<Conversation> arrayList, ConversationViewModel viewModel) {
         this.context = context;
         this.arrayList = arrayList;
         this.arrayListFull = new ArrayList<>(arrayList);
         this.viewModel = viewModel;
+        sessionManager = new SessionManager(context);
     }
 
     @NonNull
@@ -45,7 +49,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_conversation, parent, false);
-        return new ConversationAdapter.MyViewHolder(binding, viewModel);
+        return new ConversationAdapter.MyViewHolder(binding, viewModel, sessionManager);
     }
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForColorStateLists"})
@@ -100,20 +104,44 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     static class MyViewHolder extends RecyclerView.ViewHolder {
         ConversationViewModel viewModel;
         ItemConversationBinding binding;
+        SessionManager sessionManager;
 
-        public MyViewHolder(ItemConversationBinding binding,  ConversationViewModel viewModel) {
+        public MyViewHolder(ItemConversationBinding binding, ConversationViewModel viewModel, SessionManager sessionManager) {
             super(binding.getRoot());
             this.binding = binding;
-            this.viewModel=viewModel;
+            this.viewModel = viewModel;
+            this.sessionManager = sessionManager;
         }
 
         public void bind(Conversation item, int position) { // new argument
+            if (item.getFrom().equals(sessionManager.getUserID())) item.setSending(true);
+            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "hh:mm a");
+            String conversationDate = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, yyyy");
+
+            if (date == null) {
+                item.setConversationDateVisibility(true);
+                Log.i("TAG", "null: " );
+
+            } else {
+                if (date.equals(conversationDate)) {
+                    item.setConversationDateVisibility(false);
+                    Log.i("TAG", "iff: " );
+                } else {
+                    item.setConversationDateVisibility(true);
+                    Log.i("TAG", "else: " );
+
+                }
+            }
+
+            date = conversationDate;
+
+            item.setConversationDate(conversationDate);
+            item.setMsgTime(msgTime);
+
             binding.setModel(item);
-//            binding.setPosition(position); // pass position to the layout
             binding.setViewModel(viewModel);
             binding.executePendingBindings();
 //            binding.setLifecycleOwner(this);
-
         }
     }
 }

@@ -9,10 +9,14 @@ public class Conversation implements Serializable {
 
     private String id = "";
     private String msg = "";
-    private String msgTime = "";
+    private String timeStamp = "";
     private String msgType = "";
     private String name = "";
     private String from = "";
+    private boolean sending;
+    private String msgTime = "";
+    private String conversationDate = "";
+    private boolean conversationDateVisibility ;
 
     public Conversation() {
     }
@@ -33,12 +37,12 @@ public class Conversation implements Serializable {
         this.msg = msg;
     }
 
-    public String getMsgTime() {
-        return msgTime;
+    public String getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setMsgTime(String msgTime) {
-        this.msgTime = msgTime;
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public String getMsgType() {
@@ -63,6 +67,40 @@ public class Conversation implements Serializable {
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public boolean isSending() {
+        return sending;
+    }
+
+    public void setSending(boolean sending) {
+        this.sending = sending;
+    }
+
+    public String getMsgTime() {
+        return msgTime;
+    }
+
+    public String getConversationDate() {
+        return conversationDate;
+    }
+
+    public void setConversationDate(String conversationDate) {
+        this.conversationDate = conversationDate;
+    }
+
+    public void setMsgTime(String msgTime) {
+
+
+        this.msgTime = msgTime;
+    }
+
+    public boolean isConversationDateVisibility() {
+        return conversationDateVisibility;
+    }
+
+    public void setConversationDateVisibility(boolean conversationDateVisibility) {
+        this.conversationDateVisibility = conversationDateVisibility;
     }
 }
 

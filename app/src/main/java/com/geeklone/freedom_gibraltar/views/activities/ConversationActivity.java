@@ -60,11 +60,11 @@ public class ConversationActivity extends BaseActivity {
 
         adapter = new ConversationAdapter(context, arrayList, viewModel);
 
-        loadingDialog.show();
+//        loadingDialog.show();
         viewModel.getConversation().observe(this, new Observer<DataSnapshot>() {
             @Override
             public void onChanged(DataSnapshot dataSnapshot) {
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
 
                 if (dataSnapshot != null)
                     updateConversation(dataSnapshot);

@@ -6,9 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Chat;
 import com.google.firebase.database.DataSnapshot;
@@ -24,20 +22,20 @@ import java.util.List;
 public class ChatViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Chat>> liveData;
-    List<Chat> arrayList= new ArrayList<>();
+    List<Chat> arrayList = new ArrayList<>();
     Application application;
-    SessionManager sessionManager ;
+    SessionManager sessionManager;
 
     public ChatViewModel(@NonNull Application application) {
         super(application);
-        this.application=application;
+        this.application = application;
     }
 
     public MutableLiveData<List<Chat>> getChats() {
         if (liveData == null) {
             liveData = new MutableLiveData<List<Chat>>();
             sessionManager = new SessionManager(application.getApplicationContext());
-        fetchRecord();
+            fetchRecord();
         }
         return liveData;
     }
@@ -49,10 +47,13 @@ public class ChatViewModel extends AndroidViewModel {
                     public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChildren()) {
                             arrayList.clear();
-                           for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                               Chat user = snapshot.getValue(Chat.class);
-                               arrayList.add(user);
-                           }
+                            Log.e("TAG", "onDataChange: " + dataSnapshot);
+                            for (DataSnapshot snapshotMain : dataSnapshot.getChildren()) {
+                                DataSnapshot snapshot = snapshotMain.child("userInfo");
+                                Log.e("TAG", "snapshot: " + snapshot);
+                                Chat user = snapshot.getValue(Chat.class);
+                                arrayList.add(user);
+                            }
                         }
 
                         liveData.setValue(arrayList);

@@ -19,6 +19,7 @@ public class Chat implements Serializable {
     private String updatedDate = "";
     private String unreadMsgCount = "";
     private boolean msgRead;
+    private String msgDateTime = "";
 
     public Chat() {
     }
@@ -102,6 +103,14 @@ public class Chat implements Serializable {
 
     public void setMsgRead(boolean msgRead) {
         this.msgRead = msgRead;
+    }
+
+    public String getMsgDateTime() {
+        return msgDateTime;
+    }
+
+    public void setMsgDateTime(String msgDateTime) {
+        this.msgDateTime = msgDateTime;
     }
 }
 

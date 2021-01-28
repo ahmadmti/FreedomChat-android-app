@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.views.activities.ConversationActivity;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,7 @@ public class MembersViewModel extends AndroidViewModel {
     private MutableLiveData<List<User>> liveData;
     List<User> arrayList = new ArrayList<>();
     Application application;
+    SessionManager sessionManager;
 
     public MembersViewModel(@NonNull Application application) {
         super(application);
@@ -36,6 +38,7 @@ public class MembersViewModel extends AndroidViewModel {
     public MutableLiveData<List<User>> getMembers() {
         if (liveData == null) {
             liveData = new MutableLiveData<List<User>>();
+            sessionManager = new SessionManager(application.getApplicationContext());
             fetchRecord();
         }
         return liveData;
@@ -49,8 +52,10 @@ public class MembersViewModel extends AndroidViewModel {
                         if (dataSnapshot.hasChildren()) {
                             arrayList.clear();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                User user = snapshot.getValue(User.class);
-                                arrayList.add(user);
+                                if (!sessionManager.getUid().equals(snapshot.child("id").getValue(String.class))) {
+                                    User user = snapshot.getValue(User.class);
+                                    arrayList.add(user);
+                                }
                             }
 
                             liveData.setValue(arrayList);

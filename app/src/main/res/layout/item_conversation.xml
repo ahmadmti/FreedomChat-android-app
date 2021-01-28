@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="model"
             type="com.geeklone.freedom_gibraltar.model.Conversation" />
@@ -11,6 +12,7 @@
         <variable
             name="viewModel"
             type="com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel" />
+
     </data>
 
 <LinearLayout
@@ -26,14 +28,15 @@
         android:textColor="@color/colorTheme"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="EEEE, hh:mm a"
+        android:visibility="@{model.isConversationDateVisibility()? View.VISIBLE : View.GONE}"
+        android:text="@={model.conversationDate}"
         android:textSize="@dimen/text_xMini" />
 
     <LinearLayout
         android:weightSum="5.5"
         android:layout_marginBottom="@dimen/_10sdp"
         android:id="@+id/chatItem_layout_receiver"
-        android:visibility="@{model.from.equals() ? View.GONE : View.VISIBLE}"
+        android:visibility="@{model.isSending()? View.GONE : View.VISIBLE}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -78,7 +81,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="hh:mm a"
+            android:text="@={model.msgTime}"
             android:textSize="@dimen/text_xMini" />
     </LinearLayout>
 
@@ -86,8 +89,8 @@
         android:gravity="end"
         android:weightSum="5.5"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="@{model.isSending()? View.VISIBLE : View.GONE}"
         android:id="@+id/chatItem_layout_sender"
-        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -100,7 +103,7 @@
             android:layout_gravity="bottom"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="hh:mm a"
+            android:text="@={model.msgTime}"
             android:textSize="@dimen/text_xMini" />
 
         <LinearLayout

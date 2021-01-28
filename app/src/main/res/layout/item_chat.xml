@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
         <data>
+            <import type="android.view.View"/>
             <variable
                 name="model"
                 type="com.geeklone.freedom_gibraltar.model.Chat" />
@@ -55,7 +56,7 @@
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="User Name"
+            android:text="@={model.chatUserName}"
             android:textSize="@dimen/text_mini"
             />
 
@@ -65,7 +66,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="msg..."
+            android:text="@={model.lastMsg}"
             android:textSize="@dimen/text_xMini"
            />
 
@@ -85,11 +86,12 @@
                 android:id="@+id/tv_msg_time"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="hh:mm a"
+                android:text="@={model.msgDateTime}"
                 android:textSize="@dimen/text_xMini"
                />
 
             <RelativeLayout
+                android:visibility="@{model.msgRead? View.GONE : View.VISIBLE}"
                 android:id="@+id/layout_msg_unread_count"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -110,7 +112,7 @@
                     android:id="@+id/tv_msg_unread_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text=""
                     android:textSize="@dimen/text_xxMini"
                     />
 

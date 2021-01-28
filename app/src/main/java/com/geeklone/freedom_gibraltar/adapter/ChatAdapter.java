@@ -2,31 +2,23 @@ package com.geeklone.freedom_gibraltar.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.databinding.ItemChatBinding;
-import com.geeklone.freedom_gibraltar.databinding.ItemUserBinding;
+import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.model.Chat;
-import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.ChatViewModel;
-import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * developed by irfan A.
@@ -109,13 +101,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         ChatViewModel viewModel;
         ItemChatBinding binding;
 
-        public MyViewHolder(ItemChatBinding binding,  ChatViewModel viewModel) {
+        public MyViewHolder(ItemChatBinding binding, ChatViewModel viewModel) {
             super(binding.getRoot());
             this.binding = binding;
-            this.viewModel=viewModel;
+            this.viewModel = viewModel;
         }
 
-        public void bind(Chat item, int position) { // new argument
+        public void bind(Chat item, int position) {
+            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getUpdatedDate()), "hh:mm a");
+            item.setMsgDateTime(msgTime);
+
             binding.setModel(item);
 //            binding.setPosition(position); // pass position to the layout
             binding.setViewModel(viewModel);
