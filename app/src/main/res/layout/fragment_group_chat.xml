@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+        <variable
+            name="viewModel"
+            type="com.geeklone.freedom_gibraltar.viewmodel.GroupViewModel" />
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -20,29 +19,30 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="@dimen/_10sdp"
-            android:id="@+id/quizFrag_rv"
+            android:paddingTop="@dimen/_5sdp"
+            android:id="@+id/rv_chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_group"/>
 
 
         <TextView
+            android:visibility="invisible"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:id="@+id/tv_notFound"
+            android:id="@+id/tv_not_found"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Not Quiz found"
+            android:text="Tap on '+' to create a group"
             />
 
     </RelativeLayout>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_margin="@dimen/_20sdp"
         android:layout_gravity="bottom|right"

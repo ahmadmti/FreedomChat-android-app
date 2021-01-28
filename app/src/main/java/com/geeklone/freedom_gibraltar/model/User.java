@@ -20,6 +20,7 @@ public class User implements Serializable {
     private boolean enabled;
     private boolean admin;
     private String createdDate = "";
+    private boolean isSelected=false;
 
     public User() {
     }
@@ -131,5 +132,12 @@ public class User implements Serializable {
         return getPassword().length() >= 6;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 }
 

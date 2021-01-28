@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+                <variable
+                    name="viewModel"
+                    type="com.geeklone.freedom_gibraltar.viewmodel.CreateGroupViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -64,6 +65,8 @@
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            app:error="@{viewModel.errorField}"
+                            app:errorEnabled="@{viewModel.isEmpty}"
                             android:theme="@style/TextInputLayoutAppearance"
                             app:boxBackgroundColor="@android:color/transparent">
 
@@ -73,7 +76,8 @@
                                 android:layout_height="wrap_content"
                                 android:ems="10"
                                 android:hint="Group Name"
-                                android:imeOptions="actionNext"
+                                android:text="@={viewModel.name}"
+                                android:imeOptions="actionDone"
                                 android:inputType="textPersonName"
                                 android:maxLines="1"
                                />
@@ -103,6 +107,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/_10sdp"
+                        tools:listitem="@layout/item_user"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 </LinearLayout>
@@ -114,6 +119,7 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:onClick="@{()-> viewModel.onCreateGroupClicked()}"
             android:id="@+id/fab_create_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

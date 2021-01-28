@@ -14,13 +14,14 @@
 
     </data>
 
+<!--    android:onClick="@{(view)-> viewModel.startNewChat(view, model)}"-->
+
 
     <LinearLayout
-        android:onClick="@{(view)-> viewModel.startNewChat(view, model)}"
         style="@style/RippleEffect"
         android:orientation="horizontal"
         android:padding="@dimen/_15sdp"
-        android:id="@+id/cl_item_container"
+        android:id="@+id/item_click"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -79,12 +80,10 @@
                 android:layout_height="0dp"
                 >
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:visibility="invisible"
                     android:layout_centerInParent="true"
                     android:id="@+id/iv_user_check"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
-                    app:srcCompat="@drawable/ic_check_circle"
                     android:tint="@color/colorTheme"
                     />
 

@@ -1,7 +1,9 @@
 package com.geeklone.freedom_gibraltar.views.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +20,18 @@ import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.adapter.UsersAdapter;
 import com.geeklone.freedom_gibraltar.databinding.ActivityUsersBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
+import com.geeklone.freedom_gibraltar.interfaces.OnUserSelectedListener;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.geeklone.freedom_gibraltar.model.Group;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 import com.geeklone.freedom_gibraltar.views.BaseActivity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersActivity extends BaseActivity {
+public class UsersActivity extends BaseActivity implements OnUserSelectedListener {
 
     String TAG = UsersActivity.class.getSimpleName();
     Context context = this;
@@ -36,12 +41,15 @@ public class UsersActivity extends BaseActivity {
     ActivityUsersBinding binding;
     MembersViewModel viewModel;
     List<User> userList = new ArrayList<>();
+    List<User> selectedUserList;
     UsersAdapter adapter;
+    boolean isGrouping = false;
+    Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setupToolbar("Users");
+        super.setupToolbar("New Group (" + "0" + " members)");
         init();
         listener();
     }
@@ -58,6 +66,12 @@ public class UsersActivity extends BaseActivity {
 
         binding.rvUsers.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL)); //divider
 
+        if (getIntent().hasExtra("makeNewGroup")) {
+            binding.fabCreateGroup.setVisibility(View.VISIBLE);
+            isGrouping = true;
+        }
+
+
         loadingDialog.show();
         viewModel.getMembers().observe(this, new Observer<List<User>>() {
             @Override
@@ -65,7 +79,7 @@ public class UsersActivity extends BaseActivity {
                 loadingDialog.dismiss();
                 userList = users;
                 if (userList.size() > 0) {
-                    adapter = new UsersAdapter(context, userList, viewModel);
+                    adapter = new UsersAdapter(context, userList, viewModel, isGrouping, UsersActivity.this);
                     binding.rvUsers.setAdapter(adapter);
                 } else binding.tvNotFound.setVisibility(View.VISIBLE);
             }
@@ -74,12 +88,14 @@ public class UsersActivity extends BaseActivity {
     }
 
     private void listener() {
-//        binding.tvSignIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Utils.navigateTo(context, LoginActivity.class);
-//            }
-//        });
+        binding.fabCreateGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, CreateGroupActivity.class)
+                        .putExtra("userList", (Serializable) selectedUserList)
+                );
+            }
+        });
     }
 
 
@@ -107,6 +123,25 @@ public class UsersActivity extends BaseActivity {
         }
 
         return true;
+
+    }
+
+    @Override
+    public void onUserSelected() {
+        selectedUserList = new ArrayList<>();
+        int selectedCount = 0;
+        for (User user : userList) {
+            if (user.isSelected()) {
+                selectedUserList.add(user);
+                selectedCount = selectedCount + 1;
+            }
+        }
+
+        super.setupToolbar("New Group (" + selectedCount + " members)");
+
+        if (selectedUserList.size() > 0)
+            binding.fabCreateGroup.setVisibility(View.VISIBLE);
+        else binding.fabCreateGroup.setVisibility(View.INVISIBLE);
 
     }
 }

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+        <data>
+            <import type="android.view.View"/>
+            <variable
+                name="model"
+                type="com.geeklone.freedom_gibraltar.model.Group" />
+
+            <variable
+                name="viewModel"
+                type="com.geeklone.freedom_gibraltar.viewmodel.GroupViewModel" />
+
+        </data>
+
+    <LinearLayout
+        style="@style/RippleEffect"
+        android:onClick="@{(view)-> viewModel.startChat(view, model)}"
+        android:orientation="horizontal"
+        android:padding="@dimen/_15sdp"
+        android:id="@+id/cl_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="@dimen/_10sdp">
+
+            <ImageView
+                android:scaleType="fitXY"
+                android:id="@+id/iv_profile_image"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/img_place_holder"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+            style="@style/BlackText"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@={model.chatUserName}"
+            android:textSize="@dimen/text_mini"
+            />
+
+        <TextView
+            android:gravity="center"
+            android:id="@+id/tv_user_msg"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@={model.lastMsg}"
+            android:textSize="@dimen/text_xMini"
+           />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/doc"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                android:id="@+id/tv_msg_time"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@={model.msgDateTime}"
+                android:textSize="@dimen/text_xMini"
+               />
+
+            <RelativeLayout
+                android:visibility="@{model.msgRead? View.GONE : View.VISIBLE}"
+                android:id="@+id/layout_msg_unread_count"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_centerInParent="true"
+                    android:id="@+id/iv_msg_unread_count"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:background="@drawable/shape_circle"
+                    android:backgroundTint="@color/colorTheme"
+                    />
+
+                <TextView
+                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/tv_msg_unread_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="@dimen/text_xxMini"
+                    />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</layout>
