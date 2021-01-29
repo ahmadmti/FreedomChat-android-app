@@ -1,14 +1,16 @@
 package com.geeklone.freedom_gibraltar.views.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
@@ -91,9 +93,8 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
         binding.fabCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(context, CreateGroupActivity.class)
-                        .putExtra("userList", (Serializable) selectedUserList)
-                );
+                startActivityForResult(new Intent(context, CreateGroupActivity.class)
+                        .putExtra("userList", (Serializable) selectedUserList), 100);
             }
         });
     }
@@ -144,4 +145,17 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
         else binding.fabCreateGroup.setVisibility(View.INVISIBLE);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e(TAG, "onActivityResult: ");
+        if (requestCode == 100) {
+            if (resultCode == Activity.RESULT_OK) {
+                finish();
+            }
+        }
+
+    }
+
 }

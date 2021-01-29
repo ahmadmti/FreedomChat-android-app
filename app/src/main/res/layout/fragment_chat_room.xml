@@ -50,7 +50,7 @@
         android:id="@+id/fab_new_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
+        android:backgroundTint="@color/colorThemeLight"
         android:scaleType="center"
         android:src="@drawable/ic_add"
         app:tint="@color/white"

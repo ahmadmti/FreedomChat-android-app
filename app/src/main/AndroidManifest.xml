@@ -17,6 +17,7 @@
         <activity android:name=".views.activities.UsersActivity"></activity>
         <activity android:name=".views.activities.MainActivityAdmin" />
         <activity android:name=".views.activities.EditUserActivity" />
+        <activity android:name=".views.activities.GroupConversationActivity" />
         <activity android:name=".views.activities.ConversationActivity" />
         <activity android:name=".views.activities.GroupInfoActivity" />
         <activity android:name=".views.activities.CreateGroupActivity" />

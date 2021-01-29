@@ -32,7 +32,7 @@
             app:cardElevation="0dp"
             app:cardCornerRadius="@dimen/_10sdp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:scaleType="fitXY"
                 android:id="@+id/iv_profile_image"
                 android:layout_width="@dimen/_40sdp"
@@ -57,19 +57,38 @@
             android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@={model.chatUserName}"
-            android:textSize="@dimen/text_mini"
+            android:text="@={model.name}"
+            android:textSize="@dimen/text_normal"
             />
 
-        <TextView
-            android:gravity="center"
-            android:id="@+id/tv_user_msg"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="@={model.lastMsg}"
-            android:textSize="@dimen/text_xMini"
-           />
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@={model.lastMsgBy}"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_xMini"
+                    />
+
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_user_msg"
+                    android:maxLines="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@={model.lastMsg}"
+                    android:textSize="@dimen/text_xMini"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -92,7 +111,7 @@
                />
 
             <RelativeLayout
-                android:visibility="@{model.msgRead? View.GONE : View.VISIBLE}"
+                android:visibility="gone"
                 android:id="@+id/layout_msg_unread_count"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"

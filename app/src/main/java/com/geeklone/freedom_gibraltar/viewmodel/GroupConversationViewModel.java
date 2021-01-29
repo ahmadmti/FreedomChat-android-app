@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
-import com.geeklone.freedom_gibraltar.model.User;
+import com.geeklone.freedom_gibraltar.model.Group;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +33,7 @@ import fcm.androidtoandroid.model.Notification;
 
 import static android.content.ContentValues.TAG;
 
-public class ConversationViewModel extends AndroidViewModel {
+public class GroupConversationViewModel extends AndroidViewModel {
 
     public MutableLiveData<String> msg = new MutableLiveData<>();
 
@@ -42,19 +42,19 @@ public class ConversationViewModel extends AndroidViewModel {
     Application application;
     SessionManager sessionManager;
     DatabaseReference reference;
-    User user;
+    Group group;
     private String user_msg_key;
     FirebasePush firebasePush;
 
 
-    public ConversationViewModel(@NonNull Application application) {
+    public GroupConversationViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
     }
 
-    public void init(User user) {
-        this.user = user;
-        reference=FirebaseDatabase.getInstance().getReference().child("chats");
+    public void init(Group group) {
+        this.group = group;
+        reference=FirebaseDatabase.getInstance().getReference().child("groups").child(group.getId());
         sessionManager = new SessionManager(application.getApplicationContext());
         initpushNoti();
         fetchMessages();
@@ -68,7 +68,7 @@ public class ConversationViewModel extends AndroidViewModel {
     }
 
     private void fetchMessages() {
-        reference.child(sessionManager.getUid()).child(user.getId()).child("conversation")
+        reference.child("conversation")
                 .addChildEventListener(
                 new ChildEventListener() {
                     @Override
@@ -109,36 +109,36 @@ public class ConversationViewModel extends AndroidViewModel {
 //        iv_sendMsg.setVisibility(View.GONE);
 //        progressBar.setVisibility(View.VISIBLE);
 
-        DatabaseReference  referenceInfoSender = reference.child(sessionManager.getUid()).child(user.getId()).child("userInfo");
-        Map<String, Object> userInfo = new HashMap<String, Object>();
-        userInfo.put("chatUserId", user.getId());
-        userInfo.put("chatUserName", user.getName());
-        userInfo.put("chatUserImg", sessionManager.getUserImg());
-        userInfo.put("deviceToken", sessionManager.getDeviceToken());
-        referenceInfoSender.updateChildren(userInfo);
+        DatabaseReference  referenceInfo = reference.child("groupInfo");
+//        Map<String, Object> userInfo = new HashMap<String, Object>();
+//        userInfo.put("chatUserId", group.getId());
+//        userInfo.put("chatUserName", group.getName());
+//        userInfo.put("chatUserImg", sessionManager.getUserImg());
+//        userInfo.put("deviceToken", sessionManager.getDeviceToken());
+//        referenceInfo.updateChildren(userInfo);
+//
+//        DatabaseReference  referenceInfoReceiver = reference.child(group.getId()).child(sessionManager.getUid()).child("userInfo");
+//        userInfo = new HashMap<String, Object>();
+//        userInfo.put("chatUserId", sessionManager.getUid());
+//        userInfo.put("chatUserName", sessionManager.getUserName());
+//        userInfo.put("chatUserImg", group.getProfileImg());
+//        userInfo.put("deviceToken", group.getDeviceToken());
+//        referenceInfoReceiver.updateChildren(userInfo);
 
-        DatabaseReference  referenceInfoReceiver = reference.child(user.getId()).child(sessionManager.getUid()).child("userInfo");
-        userInfo = new HashMap<String, Object>();
-        userInfo.put("chatUserId", sessionManager.getUid());
-        userInfo.put("chatUserName", sessionManager.getUserName());
-        userInfo.put("chatUserImg", user.getProfileImg());
-        userInfo.put("deviceToken", user.getDeviceToken());
-        referenceInfoReceiver.updateChildren(userInfo);
 
-
-        DatabaseReference referenceSender = reference.child(sessionManager.getUid()).child(user.getId()).child("conversation");
-        DatabaseReference referenceReceiver = reference.child(user.getId()).child(sessionManager.getUid()).child("conversation");
+        DatabaseReference databaseReference =reference.child("conversation");
+//        DatabaseReference referenceReceiver = reference.child(group.getId()).child(sessionManager.getUid()).child("conversation");
 
         //payload
         Map<String, Object> map = new HashMap<String, Object>();
-        user_msg_key = referenceSender.push().getKey();
+        user_msg_key = databaseReference.push().getKey();
 
-        referenceSender.updateChildren(map);
-        referenceReceiver.updateChildren(map);
+        databaseReference.updateChildren(map);
+//        referenceReceiver.updateChildren(map);
 
 
-        DatabaseReference dbrSender = referenceSender.child(user_msg_key);
-        DatabaseReference dbrReceiver = referenceReceiver.child(user_msg_key);
+        DatabaseReference dbrSender = databaseReference.child(user_msg_key);
+//        DatabaseReference dbrReceiver = referenceReceiver.child(user_msg_key);
         Map<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put("id", user_msg_key);
         hashMap.put("msg", msg.getValue().trim());
@@ -155,20 +155,21 @@ public class ConversationViewModel extends AndroidViewModel {
                         if (task.isSuccessful()) {
 //                            iv_sendMsg.setVisibility(View.VISIBLE);
 //                            progressBar.setVisibility(View.GONE);
-                            referenceInfoSender.child("lastMsg").setValue(msg.getValue().trim());
-                            referenceInfoSender.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+                            referenceInfo.child("lastMsg").setValue(msg.getValue().trim());
+                            referenceInfo.child("lastMsgBy").setValue(sessionManager.getUserName());
+                            referenceInfo.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
 
-                            referenceInfoReceiver.child("lastMsg").setValue(msg.getValue().trim());
-                            referenceInfoReceiver.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
-                            referenceInfoReceiver.child("msgRead").setValue(false);
+//                            referenceInfoReceiver.child("lastMsg").setValue(msg.getValue().trim());
+//                            referenceInfoReceiver.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+//                            referenceInfoReceiver.child("msgRead").setValue(false);
 
                             msg.setValue("");
 
                             //send Notification
-                            if (user.getDeviceToken() != null) {
-                                firebasePush.sendToToken(user.getDeviceToken()); // send to token
-                                firebasePush.setNotification(new Notification(user.getName(), msg.getValue().trim()));
-                            }
+//                            if (group.getDeviceToken() != null) {
+//                                firebasePush.sendToToken(group.getDeviceToken()); // send to token
+//                                firebasePush.setNotification(new Notification(group.getName(), msg.getValue().trim()));
+//                            }
 
                         } else
                             Utils.showToast(application.getApplicationContext(), "Message sending failed");
@@ -188,7 +189,7 @@ public class ConversationViewModel extends AndroidViewModel {
                     }
                 });
 
-        dbrReceiver.updateChildren(hashMap);
+//        dbrReceiver.updateChildren(hashMap);
 
     }
 

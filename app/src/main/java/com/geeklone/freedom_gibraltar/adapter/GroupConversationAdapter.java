@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.databinding.ItemConversationBinding;
+import com.geeklone.freedom_gibraltar.databinding.ItemGroupConversationBinding;
 import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
-import com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel;
+import com.geeklone.freedom_gibraltar.viewmodel.GroupConversationViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +27,17 @@ import java.util.List;
  * developed by irfan A.
  */
 
-public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.MyViewHolder> implements Filterable {
+public class GroupConversationAdapter extends RecyclerView.Adapter<GroupConversationAdapter.MyViewHolder> implements Filterable {
 
     Context context;
     List<Conversation> arrayList;
     List<Conversation> arrayListFull;
     SessionManager sessionManager;
-    ConversationViewModel viewModel;
-    ItemConversationBinding binding;
+    GroupConversationViewModel viewModel;
+    ItemGroupConversationBinding binding;
     static String date;
 
-    public ConversationAdapter(Context context, List<Conversation> arrayList, ConversationViewModel viewModel) {
+    public GroupConversationAdapter(Context context, List<Conversation> arrayList, GroupConversationViewModel viewModel) {
         this.context = context;
         this.arrayList = arrayList;
         this.arrayListFull = new ArrayList<>(arrayList);
@@ -48,8 +49,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_conversation, parent, false);
-        return new ConversationAdapter.MyViewHolder(binding, viewModel, sessionManager);
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_group_conversation, parent, false);
+        return new GroupConversationAdapter.MyViewHolder(binding, viewModel, sessionManager);
     }
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForColorStateLists"})
@@ -102,11 +103,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     };
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        ConversationViewModel viewModel;
-        ItemConversationBinding binding;
+        GroupConversationViewModel viewModel;
+        ItemGroupConversationBinding binding;
         SessionManager sessionManager;
 
-        public MyViewHolder(ItemConversationBinding binding, ConversationViewModel viewModel, SessionManager sessionManager) {
+        public MyViewHolder(ItemGroupConversationBinding binding, GroupConversationViewModel viewModel, SessionManager sessionManager) {
             super(binding.getRoot());
             this.binding = binding;
             this.viewModel = viewModel;
@@ -117,6 +118,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             if (item.getFrom().equals(sessionManager.getUid())) item.setSending(true);
             String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "hh:mm a");
             String conversationDate = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, yyyy");
+
+
+
 
             if (date == null) {
                 item.setConversationDateVisibility(true);

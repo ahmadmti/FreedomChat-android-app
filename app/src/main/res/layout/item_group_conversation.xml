@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="com.geeklone.freedom_gibraltar.viewmodel.ConversationViewModel" />
+            type="com.geeklone.freedom_gibraltar.viewmodel.GroupConversationViewModel" />
 
     </data>
 
@@ -43,6 +43,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:paddingTop="@dimen/_5sdp"
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:background="@drawable/shape_msg_receiver"
@@ -52,8 +53,15 @@
 
                 <TextView
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_marginEnd="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:text="@={model.name}"
+                    android:textColor="@color/white"
+                    android:id="@+id/tv_receiving_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_normal" />
+
+                <TextView
+                    android:layout_margin="@dimen/_5sdp"
                     android:text="@={model.msg}"
                     android:textColor="@color/black"
                     android:id="@+id/tv_receiving_user_msg"

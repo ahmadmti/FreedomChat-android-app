@@ -5,9 +5,9 @@
 
     <data>
 
-        <!--        <variable-->
-        <!--            name="viewModel"-->
-        <!--            type="com.geeklone.surratitrust.viewmodel.LoginViewModel" />-->
+        <variable
+            name="viewModel"
+            type="com.geeklone.freedom_gibraltar.viewmodel.CreateGroupViewModel" />
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -46,10 +46,10 @@
                     app:cardCornerRadius="@dimen/_10sdp"
                     app:cardElevation="0dp">
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/iv_group_image"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_100sdp"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
                         android:padding="@dimen/_10sdp"
                         android:src="@drawable/ic_camera" />
 
@@ -164,7 +164,7 @@
                         android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Chat"
+                        android:text="Add New Member"
                         style="@style/BlackText"
                         android:textSize="@dimen/text_large"
                         />
@@ -218,12 +218,13 @@
         android:id="@+id/fab_create_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorTheme"
+        android:backgroundTint="@color/colorThemeLight"
         android:scaleType="center"
         android:src="@drawable/ic_camera"
         app:tint="@color/white"
         app:borderWidth="0dp"
         app:fabSize="mini"
+        app:fabCustomSize="@dimen/_20sdp"
         app:maxImageSize="@dimen/_12sdp"
         />
 

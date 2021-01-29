@@ -90,13 +90,13 @@ public class SessionManager {
         getPreferencesEditor().putString(USER_PHONE, value).commit();
     }
 
-    public String getUserID() {
-        return getSharedPreferences().getString(U_ID, null);
-    }
-
-    public void setUserID(String value) {
-        getPreferencesEditor().putString(U_ID, value).apply();
-    }
+//    public String getUserID() {
+//        return getSharedPreferences().getString(U_ID, null);
+//    }
+//
+//    public void setUserID(String value) {
+//        getPreferencesEditor().putString(U_ID, value).apply();
+//    }
 
     public float getAvailableBalance() {
         return getSharedPreferences().getFloat(AVB_BALANCE, 0);

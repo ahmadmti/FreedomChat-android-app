@@ -2,7 +2,6 @@ package com.geeklone.freedom_gibraltar.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -13,11 +12,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeklone.freedom_gibraltar.R;
-import com.geeklone.freedom_gibraltar.databinding.ItemGroupBinding;
-import com.geeklone.freedom_gibraltar.helper.Utils;
-import com.geeklone.freedom_gibraltar.local.SessionManager;
-import com.geeklone.freedom_gibraltar.model.Group;
-import com.geeklone.freedom_gibraltar.viewmodel.GroupViewModel;
+import com.geeklone.freedom_gibraltar.databinding.ItemUserBinding;
+import com.geeklone.freedom_gibraltar.interfaces.OnUserSelectedListener;
+import com.geeklone.freedom_gibraltar.model.User;
+import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,37 +24,41 @@ import java.util.List;
  * developed by irfan A.
  */
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder> implements Filterable {
+public class GroupUsersAdapter extends RecyclerView.Adapter<GroupUsersAdapter.MyViewHolder> implements Filterable {
 
     Context context;
-    List<Group> arrayList;
-    List<Group> arrayListFull;
+    List<User> arrayList;
+    List<User> arrayListFull;
+    boolean isGrouping;
+    MembersViewModel viewModel;
+    ItemUserBinding binding;
+    OnUserSelectedListener listener;
 
-    GroupViewModel viewModel;
-    ItemGroupBinding binding;
-
-    public GroupAdapter(Context context, List<Group> arrayList, GroupViewModel viewModel) {
+    public GroupUsersAdapter(Context context, List<User> arrayList, MembersViewModel viewModel, OnUserSelectedListener listener) {
         this.context = context;
         this.arrayList = arrayList;
         this.arrayListFull = new ArrayList<>(arrayList);
         this.viewModel = viewModel;
+        this.isGrouping = isGrouping;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_group, parent, false);
-        return new GroupAdapter.MyViewHolder(context, binding, viewModel);
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_user, parent, false);
+        return new MyViewHolder(binding, viewModel);
     }
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForColorStateLists"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        User user = arrayList.get(position);
+        holder.bind(user, position);
 
-        Log.i("TAG", "onChanged: " + arrayList.get(position).getName());
+        holder.binding.ivUserCheck.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle));
 
-        holder.bind(arrayList.get(position), position);
     }
 
 
@@ -78,12 +80,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     private Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Group> filteredList = new ArrayList<>();
+            List<User> filteredList = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(arrayListFull);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (Group item : arrayListFull) {
+                for (User item : arrayListFull) {
                     if (item.getName().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -103,37 +105,23 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder
     };
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        GroupViewModel viewModel;
-        ItemGroupBinding binding;
-        Context context;
-        SessionManager sessionManager;
+        ItemUserBinding binding;
+        MembersViewModel viewModel;
 
-        public MyViewHolder(Context context, ItemGroupBinding binding, GroupViewModel viewModel) {
+        public MyViewHolder(ItemUserBinding binding, MembersViewModel viewModel) {
             super(binding.getRoot());
             this.binding = binding;
             this.viewModel = viewModel;
-            this.context = context;
-            sessionManager= new SessionManager(context);
         }
 
-        public void bind(Group item, int position) {
-            Utils.loadImage(context, item.getGroupImg(), binding.ivProfileImage);
-
-            if (!item.getUpdatedDate().isEmpty()) {
-                String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getUpdatedDate()), "hh:mm a");
-                item.setMsgDateTime(msgTime);
-            }
-
-            item.setLastMsgBy(item.getLastMsgBy().isEmpty() ? "Created by " + item.getCreatedBy()
-                    : item.getLastMsgBy().equals(sessionManager.getUserName()) ? "Me: " : item.getLastMsgBy() + ": ");
-
-
-                binding.setModel(item);
+        public void bind(User item, int position) { // new argument
+            binding.setModel(item);
 //            binding.setPosition(position); // pass position to the layout
             binding.setViewModel(viewModel);
             binding.executePendingBindings();
 //            binding.setLifecycleOwner(this);
-
         }
+
+
     }
 }

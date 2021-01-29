@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@={model.chatUserName}"
-            android:textSize="@dimen/text_mini"
+            android:textSize="@dimen/text_normal"
             />
 
         <TextView

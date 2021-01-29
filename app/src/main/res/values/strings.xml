@@ -7,4 +7,6 @@
     <string name="menu_chat_room">Chat Room</string>
     <string name="menu_groups">Groups</string>
     <string name="menu_users">Users</string>
+    <string name="action_info">Info</string>
+    <string name="action_save">Save</string>
 </resources>
