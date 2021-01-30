@@ -73,7 +73,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
                     User user = arrayList.get(position);
                     arrayList.get(position).setSelected(!user.isSelected());
                     notifyDataSetChanged();
-                    listener.onUserSelected();
+                    listener.onUserSelected(  user, position);
                 }
             }
         });

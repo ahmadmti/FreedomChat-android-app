@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
@@ -22,16 +23,22 @@ import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.adapter.UsersAdapter;
 import com.geeklone.freedom_gibraltar.databinding.ActivityUsersBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
+import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.interfaces.OnUserSelectedListener;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Group;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 import com.geeklone.freedom_gibraltar.views.BaseActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UsersActivity extends BaseActivity implements OnUserSelectedListener {
 
@@ -47,6 +54,7 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
     UsersAdapter adapter;
     boolean isGrouping = false;
     Group group;
+    List<User> addedUserList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +76,15 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
 
         binding.rvUsers.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL)); //divider
 
-        if (getIntent().hasExtra("makeNewGroup")) {
+        if (getIntent().hasExtra("makeNewGroup") || getIntent().hasExtra("addMemberToGroup")) {
             binding.fabCreateGroup.setVisibility(View.VISIBLE);
             isGrouping = true;
         }
 
+        if (getIntent().hasExtra("addMemberToGroup")) {
+            addedUserList = (List<User>) getIntent().getSerializableExtra("userList");
+            group = (Group) getIntent().getSerializableExtra("group");
+        }
 
         loadingDialog.show();
         viewModel.getMembers().observe(this, new Observer<List<User>>() {
@@ -81,22 +93,66 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
                 loadingDialog.dismiss();
                 userList = users;
                 if (userList.size() > 0) {
-                    adapter = new UsersAdapter(context, userList, viewModel, isGrouping, UsersActivity.this);
+                    List<User> nonAddedUserList = new ArrayList<>();
+
+                    for (User user : userList) {
+                        if (!addedUserList.contains(user))
+                            nonAddedUserList.add(user);
+                    }
+
+                    adapter = new UsersAdapter(context, nonAddedUserList, viewModel, isGrouping, UsersActivity.this);
                     binding.rvUsers.setAdapter(adapter);
                 } else binding.tvNotFound.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     private void listener() {
         binding.fabCreateGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(context, CreateGroupActivity.class)
-                        .putExtra("userList", (Serializable) selectedUserList), 100);
+                if (getIntent().hasExtra("makeNewGroup"))
+                    startActivityForResult(new Intent(context, CreateGroupActivity.class)
+                            .putExtra("userList", (Serializable) selectedUserList), 100);
+                else addSelectedMembers(makePayload());
             }
         });
+    }
+
+    private Map<String, Object> makePayload() {
+        List<String> memberList = new ArrayList<>();
+        for (User user : addedUserList) {
+            memberList.add(user.getId());
+        }
+
+        for (User user : selectedUserList) {
+            memberList.add(user.getId());
+        }
+
+
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("members", memberList);
+
+        return hashMap;
+    }
+
+    private void addSelectedMembers(Map<String, Object> payload) {
+        FirebaseDatabase.getInstance().getReference("groups").child(group.getId()).child("groupInfo")
+                .updateChildren(payload)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        loadingDialog.dismiss();
+                        Utils.showToast(context, "Updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingDialog.dismiss();
+                        Utils.showSnackBar(context, e.getMessage());
+                    }
+                });
     }
 
 
@@ -128,12 +184,12 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
     }
 
     @Override
-    public void onUserSelected() {
+    public void onUserSelected(User user, int position) {
         selectedUserList = new ArrayList<>();
         int selectedCount = 0;
-        for (User user : userList) {
-            if (user.isSelected()) {
-                selectedUserList.add(user);
+        for (User user1 : userList) {
+            if (user1.isSelected()) {
+                selectedUserList.add(user1);
                 selectedCount = selectedCount + 1;
             }
         }

@@ -21,10 +21,11 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
 import com.geeklone.freedom_gibraltar.R;
-import com.geeklone.freedom_gibraltar.adapter.GroupConversationAdapter;
+import com.geeklone.freedom_gibraltar.adapter.GroupUsersAdapter;
 import com.geeklone.freedom_gibraltar.databinding.ActivityGroupInfoBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
 import com.geeklone.freedom_gibraltar.helper.Utils;
+import com.geeklone.freedom_gibraltar.interfaces.OnUserSelectedListener;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
 import com.geeklone.freedom_gibraltar.model.Group;
@@ -33,7 +34,9 @@ import com.geeklone.freedom_gibraltar.views.BaseActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -41,12 +44,15 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GroupInfoActivity extends BaseActivity {
+public class GroupInfoActivity extends BaseActivity implements OnUserSelectedListener {
 
     String TAG = GroupConversationActivity.class.getSimpleName();
     Context context = this;
@@ -54,14 +60,14 @@ public class GroupInfoActivity extends BaseActivity {
     SessionManager sessionManager = new SessionManager(this);
 
     ActivityGroupInfoBinding binding;
-    DataSnapshot userList;
-    GroupConversationAdapter adapter;
+    GroupUsersAdapter adapter;
     User user;
     List<Conversation> arrayList = new ArrayList<>();
     Group group;
     String str_groupName;
     String str_key;
     Uri resultUri;
+    List<User> userList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,9 @@ public class GroupInfoActivity extends BaseActivity {
         super.setupToolbar("Group Info");
         init();
         listener();
+        fetchMembers();
     }
+
 
     @SuppressLint("SetTextI18n")
     private void init() {
@@ -86,7 +94,37 @@ public class GroupInfoActivity extends BaseActivity {
         Utils.loadImage(context, group.getGroupImg(), binding.ivGroupImage);
         binding.ivGroupImage.setPadding(0, 0, 0, 0);
         binding.etGroupName.setText(group.getName());
-        binding.tvGroupMembersCount.setText(group.getMemberCount()+" members");
+        binding.tvGroupMembersCount.setText(group.getMemberCount() + " members");
+    }
+
+    private void fetchMembers() {
+        FirebaseDatabase.getInstance().getReference("users")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChildren()) {
+                            arrayList.clear();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                if (group.getMembers().contains(snapshot.child("id").getValue(String.class))) {
+                                    User user = snapshot.getValue(User.class);
+                                    userList.add(user);
+                                }
+                            }
+
+                            if (userList.size() > 0) {
+                                adapter = new GroupUsersAdapter(context, userList, null, true, GroupInfoActivity.this);
+                                binding.rvGroupMembers.setAdapter(adapter);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.w("TAG", "Failed to read value.", error.toException());
+                    }
+                });
+
     }
 
 
@@ -103,8 +141,11 @@ public class GroupInfoActivity extends BaseActivity {
         binding.layoutAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+//                startActivity(new Intent(context, UsersActivity.class)
+//                        .putExtra("addMemberToGroup", true)
+//                        .putExtra("userList", (Serializable) userList)
+//                        .putExtra("group", group)
+//                );
             }
         });
 
@@ -249,5 +290,47 @@ public class GroupInfoActivity extends BaseActivity {
                         Utils.showSnackBar(context, e.getMessage());
                     }
                 });
+    }
+
+    @Override
+    public void onUserSelected(User user, int position) {
+        Log.i(TAG, "onUserSelected: " + position);
+        deleteUser(user, position);
+
+    }
+
+    private void deleteUser(User user, int position) {
+        loadingDialog.show();
+        FirebaseDatabase.getInstance().getReference("groups")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChildren()) {
+                            arrayList.clear();
+                            for (DataSnapshot snapshotMain : dataSnapshot.getChildren()) {
+                                DataSnapshot snapshot = snapshotMain.child("groupInfo");
+                                for (DataSnapshot snapshot1 : snapshot.child("members").getChildren()) {
+                                    if (snapshot1.getValue(String.class).equals(user.getId())) {
+                                        snapshot1.getRef().removeValue();
+                                        userList.remove(position);
+                                        adapter.notifyDataSetChanged();
+                                        binding.tvGroupMembersCount.setText(group.getMemberCount() + " members");
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        loadingDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        loadingDialog.dismiss();
+                        Log.w("TAG", "Failed to read value.", error.toException());
+                    }
+                });
+
+
     }
 }

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface OnUserSelectedListener {
 
-    void onUserSelected();
+    void onUserSelected( User user, int position);
 }

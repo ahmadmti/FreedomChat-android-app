@@ -68,7 +68,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         binding.executePendingBindings();
 
         userList = (List<User>) getIntent().getSerializableExtra("userList");
-        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null, CreateGroupActivity.this));
+        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null, false, CreateGroupActivity.this));
     }
 
 
@@ -88,8 +88,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
                 str_groupName = binding.etGroupName.getText().toString().trim();
                 if (str_groupName.isEmpty()) {
                     binding.etGroupName.setError("required");
-                } else createNewGroup(makePayload(null));
-//                    uploadImage(resultUri);
+                } else uploadImage(null);
 
             }
         });
@@ -165,7 +164,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         loadingDialog.show();
         if (uri != null) {
             StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("groups").child(str_key)
-                    .child("grp_img"+ "." + Utils.getFileExtension(context, uri)); //root path
+                    .child("grp_img" + "." + Utils.getFileExtension(context, uri)); //root path
 
             mStorageRef.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -185,7 +184,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
                         public void onFailure(@NonNull Exception e) {
                             Utils.showSnackBar(context, e.getMessage());
                             loadingDialog.dismiss();
-                            Log.e("TAG", "onFailure: "+  e.getMessage());
+                            Log.e("TAG", "onFailure: " + e.getMessage());
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -198,10 +197,8 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
     }
 
 
-
-
     @Override
-    public void onUserSelected() {
+    public void onUserSelected(User user, int position) {
 
     }
 }
