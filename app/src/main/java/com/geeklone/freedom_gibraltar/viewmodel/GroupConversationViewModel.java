@@ -1,6 +1,11 @@
 package com.geeklone.freedom_gibraltar.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.util.Log;
 import android.view.View;
 
@@ -12,6 +17,7 @@ import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
 import com.geeklone.freedom_gibraltar.model.Group;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -45,6 +51,7 @@ public class GroupConversationViewModel extends AndroidViewModel {
     Group group;
     private String user_msg_key;
     FirebasePush firebasePush;
+    BroadcastReceiver broadcastReceiver;
 
 
     public GroupConversationViewModel(@NonNull Application application) {
@@ -58,6 +65,21 @@ public class GroupConversationViewModel extends AndroidViewModel {
         sessionManager = new SessionManager(application.getApplicationContext());
         initpushNoti();
         fetchMessages();
+        setupBroadCast();
+    }
+    private void setupBroadCast() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent i) {
+                String resultUri = i.getStringExtra("URI");
+                String   name =i.getStringExtra("name");
+                sendImage(resultUri, name);
+                
+                
+            }
+        };
+
+        application.getApplicationContext().registerReceiver(broadcastReceiver, new IntentFilter("getImgURI"));
     }
 
     public MutableLiveData<DataSnapshot> getConversation() {
@@ -102,6 +124,68 @@ public class GroupConversationViewModel extends AndroidViewModel {
         );
     }
 
+    public void attachImg(View view) {
+        ImagePicker.Companion.with((Activity)view.getContext())
+                .compress(512)         //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)  //Final image resolution will be less than 1080 x 1080(Optional)
+                .start();
+    }
+
+    public void sendImage(String uri, String name) {
+        Log.i(TAG, "sendImage: ");
+        DatabaseReference  referenceInfo = reference.child("groupInfo");
+        DatabaseReference databaseReference =reference.child("conversation");
+
+        //payload
+        Map<String, Object> map = new HashMap<String, Object>();
+        user_msg_key = databaseReference.push().getKey();
+
+        databaseReference.updateChildren(map);
+
+        DatabaseReference dbrSender = databaseReference.child(user_msg_key);
+        Map<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("id", user_msg_key);
+        hashMap.put("msg", uri);
+        hashMap.put("timeStamp", String.valueOf(Utils.getSysTimeStamp()));
+        hashMap.put("msgType", "img");
+        hashMap.put("imgName", name);
+        hashMap.put("name", sessionManager.getUserName());
+        hashMap.put("from", sessionManager.getUid());
+
+        Log.e(TAG, "sendMessage: ");
+        dbrSender.updateChildren(hashMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+//                            iv_sendMsg.setVisibility(View.VISIBLE);
+//                            progressBar.setVisibility(View.GONE);
+                            referenceInfo.child("lastMsg").setValue(name);
+                            referenceInfo.child("lastMsgBy").setValue(sessionManager.getUserName());
+                            referenceInfo.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
+
+                            msg.setValue("");
+                        } else
+                            Utils.showToast(application.getApplicationContext(), "Message sending failed");
+
+                        Log.e(TAG, "sendMessage: " + task.getResult());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Utils.showToast(application.getApplicationContext(), "Message sending failed");
+//                        iv_sendMsg.setVisibility(View.VISIBLE);
+//                        progressBar.setVisibility(View.GONE);
+                        Log.e(TAG, "sendMessage: " + e.getMessage());
+
+                    }
+                });
+
+    }
+
+
     public void sendMessage(View view) {
         if (msg.getValue() == null || msg.getValue().isEmpty())
             return;
@@ -143,7 +227,7 @@ public class GroupConversationViewModel extends AndroidViewModel {
         hashMap.put("id", user_msg_key);
         hashMap.put("msg", msg.getValue().trim());
         hashMap.put("timeStamp", String.valueOf(Utils.getSysTimeStamp()));
-        hashMap.put("msgType", "text");
+        hashMap.put("msgType", "txt");
         hashMap.put("name", sessionManager.getUserName());
         hashMap.put("from", sessionManager.getUid());
 
@@ -203,5 +287,10 @@ public class GroupConversationViewModel extends AndroidViewModel {
         });
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        application.getApplicationContext().unregisterReceiver(broadcastReceiver);
+    }
 }
 

@@ -3,7 +3,11 @@ package com.geeklone.freedom_gibraltar.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -18,14 +22,23 @@ import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.adapter.GroupConversationAdapter;
 import com.geeklone.freedom_gibraltar.databinding.ActivityGroupConversationBinding;
 import com.geeklone.freedom_gibraltar.helper.LoadingDialog;
+import com.geeklone.freedom_gibraltar.helper.Utils;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
 import com.geeklone.freedom_gibraltar.model.Conversation;
 import com.geeklone.freedom_gibraltar.model.Group;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.GroupConversationViewModel;
 import com.geeklone.freedom_gibraltar.views.BaseActivity;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +138,7 @@ public class GroupConversationActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,6 +148,78 @@ public class GroupConversationActivity extends BaseActivity {
             }
         }
 
+        //ImagePicker result
+        if (resultCode == Activity.RESULT_OK) {
+
+            if (data.getData() != null) {
+                loadingDialog.show();
+                //uploading the file
+                Uri fileUri = data.getData();
+                Log.e(TAG, "onActivityResult: "+ fileUri );
+
+                String uriString = fileUri.toString();
+                File myFile = new File(uriString);
+                String path = myFile.getAbsolutePath();
+                String displayName = null;
+
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = getContentResolver().query(fileUri, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
+
+                uploadImage(fileUri, displayName);
+
+            }
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Utils.showSnackBar(context, ImagePicker.Companion.getError(data));
+        }
+    }
+
+    private void uploadImage(Uri uri, String displayName) {
+        if (uri != null) {
+            StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("groups/images")
+                    .child(String.valueOf(Utils.getSysTimeStamp())); //root path
+
+            mStorageRef.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            mStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    loadingDialog.dismiss();
+                                    Intent intent = new Intent();
+                                    intent.setAction("getImgURI");
+                                    intent.putExtra("URI", String.valueOf(uri));
+                                    intent.putExtra("name", String.valueOf(displayName));
+                                    sendBroadcast(intent);
+                                }
+                            });
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Utils.showSnackBar(context, e.getMessage());
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
+
+        }
     }
 
 }

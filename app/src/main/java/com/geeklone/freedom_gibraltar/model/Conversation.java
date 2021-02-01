@@ -15,6 +15,7 @@ public class Conversation implements Serializable {
     private String from = "";
     private boolean sending;
     private String msgTime = "";
+    private String imgName = "";
     private String conversationDate = "";
     private boolean conversationDateVisibility ;
 
@@ -90,9 +91,15 @@ public class Conversation implements Serializable {
     }
 
     public void setMsgTime(String msgTime) {
-
-
         this.msgTime = msgTime;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
     public boolean isConversationDateVisibility() {

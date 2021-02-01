@@ -163,7 +163,7 @@ public class Utils {
             return;
 
         Glide.with(context)
-                .load( imgURL)
+                .load(imgURL)
                 .placeholder(progressDrawable)
                 .error(R.drawable.img_place_holder)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -402,7 +402,6 @@ public class Utils {
     }
 
 
-
     public static void underlineTextView(TextView textView) {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
@@ -452,5 +451,6 @@ public class Utils {
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
+
 
 }

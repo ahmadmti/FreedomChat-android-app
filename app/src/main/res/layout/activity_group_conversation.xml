@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:onClick="@{(view)-> viewModel.attachImg(view)}"
                     android:padding="@dimen/_10sdp"
                     style="@style/RippleEffect"
                     android:layout_weight="1"

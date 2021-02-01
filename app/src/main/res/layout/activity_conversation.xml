@@ -51,6 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:onClick="@{(view)-> viewModel.attachImg(view)}"
                     android:padding="@dimen/_10sdp"
                     style="@style/RippleEffect"
                     android:layout_weight="1"
@@ -81,7 +82,7 @@
                     android:layout_height="match_parent">
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:onClick="@{(view)-> viewModel.sendMessage(view)}"
+                        android:onClick="@{()-> viewModel.sendMessage()}"
                         android:layout_centerInParent="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
