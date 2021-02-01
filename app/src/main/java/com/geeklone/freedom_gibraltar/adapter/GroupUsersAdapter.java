@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.geeklone.freedom_gibraltar.R;
 import com.geeklone.freedom_gibraltar.databinding.ItemUserBinding;
 import com.geeklone.freedom_gibraltar.interfaces.OnUserSelectedListener;
 import com.geeklone.freedom_gibraltar.local.SessionManager;
+import com.geeklone.freedom_gibraltar.model.Group;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 
@@ -33,6 +35,7 @@ public class GroupUsersAdapter extends RecyclerView.Adapter<GroupUsersAdapter.My
     Context context;
     List<User> arrayList;
     List<User> arrayListFull;
+    Group group;
     boolean isGrouping;
     MembersViewModel viewModel;
     ItemUserBinding binding;
@@ -40,9 +43,10 @@ public class GroupUsersAdapter extends RecyclerView.Adapter<GroupUsersAdapter.My
     boolean enableDelete;
     SessionManager sessionManager;
 
-    public GroupUsersAdapter(Context context, List<User> arrayList, MembersViewModel viewModel, boolean enableDelete, OnUserSelectedListener listener) {
+    public GroupUsersAdapter(Context context, List<User> arrayList, Group group, MembersViewModel viewModel, boolean enableDelete, OnUserSelectedListener listener) {
         this.context = context;
         this.arrayList = arrayList;
+        this.group = group;
         this.arrayListFull = new ArrayList<>(arrayList);
         this.viewModel = viewModel;
         this.isGrouping = isGrouping;
@@ -66,14 +70,16 @@ public class GroupUsersAdapter extends RecyclerView.Adapter<GroupUsersAdapter.My
         holder.bind(user, position);
 
         if (enableDelete) {
-            if (!user.getId().equals(sessionManager.getUid()))
-                holder.binding.ivUserCheck.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_delete));
-            else holder.binding.ivUserCheck.setImageDrawable(null);
+            if (group.getCreatedById().equals(sessionManager.getUid())) {
+                if (!user.getId().equals(sessionManager.getUid())) {
+                    holder.binding.ivUserCheck.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_delete));
+                } else holder.binding.layoutDelMember.setVisibility(View.GONE);
+            } else holder.binding.layoutDelMember.setVisibility(View.GONE);
         } else
             holder.binding.ivUserCheck.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle));
 
 
-        if (enableDelete && !user.getId().equals(sessionManager.getUid()))
+        if (enableDelete)
             binding.layoutDelMember.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -30,19 +30,22 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
 
     Context context;
     List<User> arrayList;
+    List<User> addedUserList;
     List<User> arrayListFull;
     boolean isGrouping;
     MembersViewModel viewModel;
     ItemUserBinding binding;
     OnUserSelectedListener listener;
+    boolean flag;
 
-    public UsersAdapter(Context context, List<User> arrayList, MembersViewModel viewModel, boolean isGrouping, OnUserSelectedListener listener) {
+    public UsersAdapter(Context context, List<User> arrayList, List<User> addedUserList, MembersViewModel viewModel, boolean isGrouping, OnUserSelectedListener listener) {
         this.context = context;
         this.arrayList = arrayList;
+        this.addedUserList = addedUserList;
         this.arrayListFull = new ArrayList<>(arrayList);
         this.viewModel = viewModel;
         this.isGrouping = isGrouping;
-        this.listener=listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -59,9 +62,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
         User user = arrayList.get(position);
         holder.bind(user, position);
 
+//        if (flag)
+//            for (User user1 : addedUserList) {
+//                if (user.getId().equals(user1.getId())) {
+//                    user.setSelected(true);
+//                    break;
+//                } else user.setSelected(false);
+//            }
+
+
         if (user.isSelected()) {
             holder.binding.ivUserCheck.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_circle));
         } else holder.binding.ivUserCheck.setImageDrawable(null);
+
 
         holder.binding.itemClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,11 +82,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
                 if (!isGrouping) {
                     viewModel.startNewChat(v, arrayList.get(position));
                 } else {
-                    Log.i("TAG", "onClick: ");
+                    Log.i("TAG", "onClick: " + user.isSelected());
                     User user = arrayList.get(position);
                     arrayList.get(position).setSelected(!user.isSelected());
                     notifyDataSetChanged();
-                    listener.onUserSelected(  user, position);
+                    listener.onUserSelected(user, position);
                 }
             }
         });

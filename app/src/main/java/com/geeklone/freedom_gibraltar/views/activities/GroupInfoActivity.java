@@ -113,7 +113,7 @@ public class GroupInfoActivity extends BaseActivity implements OnUserSelectedLis
                             }
 
                             if (userList.size() > 0) {
-                                adapter = new GroupUsersAdapter(context, userList, null, true, GroupInfoActivity.this);
+                                adapter = new GroupUsersAdapter(context, userList, group, null, true, GroupInfoActivity.this);
                                 binding.rvGroupMembers.setAdapter(adapter);
                             }
                         }
@@ -141,11 +141,12 @@ public class GroupInfoActivity extends BaseActivity implements OnUserSelectedLis
         binding.layoutAddMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(context, UsersActivity.class)
-//                        .putExtra("addMemberToGroup", true)
-//                        .putExtra("userList", (Serializable) userList)
-//                        .putExtra("group", group)
-//                );
+                startActivityForResult(new Intent(context, UsersActivity.class)
+                                .putExtra("addMemberToGroup", true)
+                                .putExtra("userList", (Serializable) userList)
+                                .putExtra("group", group),
+                        300
+                );
             }
         });
 
@@ -221,6 +222,8 @@ public class GroupInfoActivity extends BaseActivity implements OnUserSelectedLis
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils.showSnackBar(this, String.valueOf(result.getError()));
             }
+        } else if (requestCode == 300) {
+            if (resultCode == Activity.RESULT_OK) finish();
         }
     }
 

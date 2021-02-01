@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,7 @@ import com.geeklone.freedom_gibraltar.model.Group;
 import com.geeklone.freedom_gibraltar.model.User;
 import com.geeklone.freedom_gibraltar.viewmodel.MembersViewModel;
 import com.geeklone.freedom_gibraltar.views.BaseActivity;
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,6 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -92,15 +96,40 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
             public void onChanged(List<User> users) {
                 loadingDialog.dismiss();
                 userList = users;
+
                 if (userList.size() > 0) {
                     List<User> nonAddedUserList = new ArrayList<>();
 
-                    for (User user : userList) {
-                        if (!addedUserList.contains(user))
-                            nonAddedUserList.add(user);
+                    //todo
+                    if (getIntent().hasExtra("addMemberToGroup")) {
+                        List<String> fullStr = new ArrayList<>();
+                        List<String> addedStr = new ArrayList<>();
+                        List<String> diffStr = new ArrayList<>();
+
+                        for (User user : userList)
+                            fullStr.add(user.getId());
+
+                        for (User user : addedUserList)
+                            addedStr.add(user.getId());
+
+                        for (String s : fullStr)
+                            if (!addedStr.contains(s))
+                                diffStr.add(s);
+
+                        for (String s : diffStr)
+                            for (User user : userList)
+                                if (user.getId().equals(s))
+                                    nonAddedUserList.add(user);
+
                     }
 
-                    adapter = new UsersAdapter(context, nonAddedUserList, viewModel, isGrouping, UsersActivity.this);
+
+//                    for (User user : nonAddedUserList) {
+//                        Log.i(TAG, "onChanged: " + user.getName());
+//                    }
+
+
+                    adapter = new UsersAdapter(context, nonAddedUserList, addedUserList, viewModel, isGrouping, UsersActivity.this);
                     binding.rvUsers.setAdapter(adapter);
                 } else binding.tvNotFound.setVisibility(View.VISIBLE);
             }
@@ -125,9 +154,10 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
             memberList.add(user.getId());
         }
 
-        for (User user : selectedUserList) {
-            memberList.add(user.getId());
-        }
+        if (selectedUserList != null)
+            for (User user : selectedUserList) {
+                memberList.add(user.getId());
+            }
 
 
         Map<String, Object> hashMap = new HashMap<>();
@@ -144,6 +174,14 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
                     public void onSuccess(Void aVoid) {
                         loadingDialog.dismiss();
                         Utils.showToast(context, "Updated successfully!");
+                        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setResult(Activity.RESULT_OK, new Intent());
+                                finish();
+                            }
+                        }, 500);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

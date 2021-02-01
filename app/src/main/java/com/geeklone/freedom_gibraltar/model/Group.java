@@ -17,6 +17,7 @@ public class Group implements Serializable {
     private String lastMsgBy = "";
     private String createdDate = "";
     private String createdBy = "";
+    private String createdById = "";
     private String updatedDate = "";
     private String unreadMsgCount = "";
 //    private boolean msgRead;
@@ -121,6 +122,14 @@ public class Group implements Serializable {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(String createdById) {
+        this.createdById = createdById;
     }
 }
 

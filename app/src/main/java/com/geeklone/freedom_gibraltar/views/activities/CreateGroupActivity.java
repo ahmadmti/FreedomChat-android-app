@@ -68,7 +68,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         binding.executePendingBindings();
 
         userList = (List<User>) getIntent().getSerializableExtra("userList");
-        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null, false, CreateGroupActivity.this));
+        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null,null, false, CreateGroupActivity.this));
     }
 
 
@@ -108,6 +108,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         hashMap.put("memberCount", String.valueOf(memberList.size()));
         hashMap.put("createdDate", Utils.formatDateTimeFromTS(Utils.getSysTimeStamp(), "yyyy-MM-dd HH:mm:ss"));
         hashMap.put("createdBy", sessionManager.getUserName());
+        hashMap.put("createdById", sessionManager.getUid());
         hashMap.put("members", memberList);
 
         return hashMap;

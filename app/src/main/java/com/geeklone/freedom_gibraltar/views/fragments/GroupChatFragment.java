@@ -74,6 +74,12 @@ public class GroupChatFragment extends Fragment {
 
         binding.rvChat.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL)); //divider
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         loadingDialog.show();
         viewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<List<Group>>() {
             @Override
