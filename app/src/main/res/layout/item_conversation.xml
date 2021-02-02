@@ -28,7 +28,7 @@
         android:textColor="@color/colorThemeLight"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="@{model.isConversationDateVisibility()? View.VISIBLE : View.GONE}"
+        android:visibility="@{model.isConversationDateVisibility? View.VISIBLE : View.GONE}"
         android:text="@={model.conversationDate}"
         android:textSize="@dimen/text_xMini" />
 

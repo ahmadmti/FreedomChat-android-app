@@ -120,6 +120,24 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
 
         public void bind(Conversation item, int position) { // new argument
+            String conversationDate = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, yyyy");
+//            if (date == null) {
+//                item.setConversationDateVisibility(true);
+//                Log.i("TAG", "null: " + date);
+//
+//            } else {
+//                if (date.equals(conversationDate)) {
+//                    item.setConversationDateVisibility(false);
+//                    Log.i("TAG", "iff: "+ date);
+//                } else {
+//                    item.setConversationDateVisibility(true);
+//                    Log.i("TAG", "else: "+ date);
+//                }
+//            }
+
+//            date = conversationDate;
+//            item.setConversationDate(conversationDate); //todo
+
             if (item.getFrom().equals(sessionManager.getUid())) {
                 item.setSending(true);
                 if (item.getMsgType().equals("img"))
@@ -128,28 +146,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 if (item.getMsgType().equals("img"))
                     Utils.loadImage(context, item.getMsg(), binding.ivRecieverUserImg);
             }
-            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "hh:mm a");
-            String conversationDate = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, yyyy");
 
-//            if (date == null) {
-//                item.setConversationDateVisibility(true);
-//                Log.i("TAG", "null: ");
-//
-//            } else {
-//                if (date.equals(conversationDate)) {
-//                    item.setConversationDateVisibility(false);
-//                    Log.i("TAG", "iff: ");
-//                } else {
-//                    item.setConversationDateVisibility(true);
-//                    Log.i("TAG", "else: ");
-//
-//                }
-//
-//            }
-
-            date = conversationDate;
-
-            item.setConversationDate(conversationDate);
+            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, hh:mm a");
             item.setMsgTime(msgTime);
 
 

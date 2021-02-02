@@ -80,6 +80,9 @@ public class ConversationActivity extends BaseActivity {
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
 
+        binding.rvConversation.setHasFixedSize(true);
+
+
         if (getIntent().hasExtra("chat")) {
             Chat chat = (Chat) getIntent().getSerializableExtra("chat");
             super.setupToolbar(chat.getChatUserName());
@@ -105,6 +108,7 @@ public class ConversationActivity extends BaseActivity {
         }
 
         adapter = new ConversationAdapter(context, arrayList, viewModel);
+        binding.rvConversation.setItemViewCacheSize(arrayList.size());
 
 //        loadingDialog.show();
         viewModel.getConversation().observe(this, new Observer<DataSnapshot>() {
@@ -142,8 +146,8 @@ public class ConversationActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId())
-                .child("userInfo").child("msgRead").setValue(true);
+//        FirebaseDatabase.getInstance().getReference().child("chats").child(sessionManager.getUid()).child(user.getId())
+//                .child("userInfo").child("msgRead").setValue(true);
     }
 
     @Override

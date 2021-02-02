@@ -1,6 +1,7 @@
 package com.geeklone.freedom_gibraltar.views.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,7 +27,34 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
 //        Utils.navigateClearTo(context, MainActivityAdmin.class);
-        delayScreen();
+        checkTrailPeriod();
+    }
+
+    private void checkTrailPeriod() {
+        if (sessionManager.getIsFirstTime()) {
+            sessionManager.setIsFirstTime(false);
+            sessionManager.saveExpDate(Utils.addDays(2));
+            delayScreen();
+        } else {
+            if (Utils.isTodaysDate(sessionManager.getExpDate()))
+                showTrailDialog();
+            else delayScreen();
+
+        }
+    }
+
+    private void showTrailDialog() {
+        android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(this);
+        dialog.setTitle("Trial")
+                .setMessage("Your trial has been expired.")
+                .setCancelable(false)
+
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialoginterface, int i) {
+                        finish();
+                    }
+                })
+                .show();
     }
 
     private void delayScreen() {
@@ -42,7 +70,7 @@ public class SplashActivity extends AppCompatActivity {
         if (sessionManager.getIsLoggedIn()) {
             if (sessionManager.getIsAdmin())
                 Utils.navigateClearTo(context, MainActivityAdmin.class);
-            else Utils.navigateClearTo(context, MainActivityAdmin.class);
+            else Utils.navigateClearTo(context, MainActivity.class);
         } else Utils.navigateClearTo(context, LoginActivity.class);
     }
 }

@@ -152,9 +152,9 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager.setIsAdmin(user.isAdmin());
         sessionManager.setIsLoggedIn(true);
 
-//        if (user.isAdmin())
+        if (user.isAdmin())
             Utils.navigateClearTo(context, MainActivityAdmin.class);
-//        else Utils.navigateClearTo(context, MainActivity.class);
+        else Utils.navigateClearTo(context, MainActivity.class);
 
     }
 }

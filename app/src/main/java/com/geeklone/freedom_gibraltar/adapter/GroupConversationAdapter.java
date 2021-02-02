@@ -129,30 +129,30 @@ public class GroupConversationAdapter extends RecyclerView.Adapter<GroupConversa
                 if (item.getMsgType().equals("img"))
                     Utils.loadImage(context, item.getMsg(), binding.ivReceieverUserImg);
             }
-            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "hh:mm a");
+            String msgTime = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, hh:mm a");
             String conversationDate = Utils.formatDateTimeFromTS(Long.parseLong(item.getTimeStamp()), "MMM dd, yyyy");
 
 
 
 
-            if (date == null) {
-                item.setConversationDateVisibility(true);
-                Log.i("TAG", "null: " );
-
-            } else {
-                if (date.equals(conversationDate)) {
-                    item.setConversationDateVisibility(false);
-                    Log.i("TAG", "iff: " );
-                } else {
-                    item.setConversationDateVisibility(true);
-                    Log.i("TAG", "else: " );
-
-                }
-            }
-
-            date = conversationDate;
-
-            item.setConversationDate(conversationDate);
+//            if (date == null) {
+//                item.setConversationDateVisibility(true);
+//                Log.i("TAG", "null: " );
+//
+//            } else {
+//                if (date.equals(conversationDate)) {
+//                    item.setConversationDateVisibility(false);
+//                    Log.i("TAG", "iff: " );
+//                } else {
+//                    item.setConversationDateVisibility(true);
+//                    Log.i("TAG", "else: " );
+//
+//                }
+//            }
+//
+//            date = conversationDate;
+//
+//            item.setConversationDate(conversationDate);
             item.setMsgTime(msgTime);
 
             binding.ivSenderUserImg.setOnClickListener(new View.OnClickListener() {

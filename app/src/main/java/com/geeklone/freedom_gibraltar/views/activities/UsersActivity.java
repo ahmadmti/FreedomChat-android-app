@@ -121,7 +121,10 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
                                 if (user.getId().equals(s))
                                     nonAddedUserList.add(user);
 
-                    }
+                        adapter = new UsersAdapter(context, nonAddedUserList, addedUserList, viewModel, isGrouping, UsersActivity.this);
+
+                    } else
+                        adapter = new UsersAdapter(context, userList, addedUserList, viewModel, isGrouping, UsersActivity.this);
 
 
 //                    for (User user : nonAddedUserList) {
@@ -129,7 +132,6 @@ public class UsersActivity extends BaseActivity implements OnUserSelectedListene
 //                    }
 
 
-                    adapter = new UsersAdapter(context, nonAddedUserList, addedUserList, viewModel, isGrouping, UsersActivity.this);
                     binding.rvUsers.setAdapter(adapter);
                 } else binding.tvNotFound.setVisibility(View.VISIBLE);
             }

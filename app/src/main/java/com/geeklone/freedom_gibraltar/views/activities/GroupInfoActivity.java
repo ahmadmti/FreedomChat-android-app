@@ -6,10 +6,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +48,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -217,13 +220,25 @@ public class GroupInfoActivity extends BaseActivity implements OnUserSelectedLis
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 resultUri = result.getUri();
-                binding.ivGroupImage.setImageURI(resultUri);
-                binding.ivGroupImage.setPadding(0, 0, 0, 0);
+//                binding.ivGroupImage.setImageURI(resultUri);
+                Bitmap bitmap ;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+                    binding.ivGroupImage.setImageBitmap(bitmap);
+                    binding.ivGroupImage.setPadding(0, 0, 0, 0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils.showSnackBar(this, String.valueOf(result.getError()));
             }
         } else if (requestCode == 300) {
-            if (resultCode == Activity.RESULT_OK) finish();
+            if (resultCode == Activity.RESULT_OK) {
+                setResult(Activity.RESULT_OK, new Intent());
+                finish();
+
+            }
         }
     }
 
@@ -270,7 +285,7 @@ public class GroupInfoActivity extends BaseActivity implements OnUserSelectedLis
         hashMap.put("name", str_groupName);
 
         if (groupImgUri != null)
-            hashMap.put("groupImg", groupImgUri);
+            hashMap.put("groupImg", String.valueOf(groupImgUri));
 
         return hashMap;
     }

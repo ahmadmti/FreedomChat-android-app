@@ -199,7 +199,7 @@ public class ConversationViewModel extends AndroidViewModel {
 
                             referenceInfoReceiver.child("lastMsg").setValue(name);
                             referenceInfoReceiver.child("updatedDate").setValue(String.valueOf(Utils.getSysTimeStamp()));
-                            referenceInfoReceiver.child("msgRead").setValue(false);
+                            referenceInfoReceiver.child("msgRead").setValue(true);
 
                             msg.setValue("");
 

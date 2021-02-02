@@ -3,8 +3,10 @@ package com.geeklone.freedom_gibraltar.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -33,6 +35,7 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +71,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         binding.executePendingBindings();
 
         userList = (List<User>) getIntent().getSerializableExtra("userList");
-        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null,null, false, CreateGroupActivity.this));
+        binding.rvGroupMembers.setAdapter(new GroupUsersAdapter(context, userList, null, null, false, CreateGroupActivity.this));
     }
 
 
@@ -88,7 +91,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
                 str_groupName = binding.etGroupName.getText().toString().trim();
                 if (str_groupName.isEmpty()) {
                     binding.etGroupName.setError("required");
-                } else uploadImage(null);
+                } else uploadImage(resultUri);
 
             }
         });
@@ -104,7 +107,7 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("id", str_key);
         hashMap.put("name", str_groupName);
-        hashMap.put("groupImg", groupImgUri);
+        hashMap.put("groupImg", String.valueOf(groupImgUri));
         hashMap.put("memberCount", String.valueOf(memberList.size()));
         hashMap.put("createdDate", Utils.formatDateTimeFromTS(Utils.getSysTimeStamp(), "yyyy-MM-dd HH:mm:ss"));
         hashMap.put("createdBy", sessionManager.getUserName());
@@ -150,8 +153,16 @@ public class CreateGroupActivity extends BaseActivity implements OnUserSelectedL
             if (resultCode == RESULT_OK) {
                 assert result != null;
                 resultUri = result.getUri();
-                binding.ivGroupImage.setImageURI(resultUri);
-                binding.ivGroupImage.setPadding(0, 0, 0, 0);
+//                binding.ivGroupImage.setImageURI(resultUri);
+                Bitmap bitmap;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(),true);
+                    binding.ivGroupImage.setImageBitmap(bitmap);
+                    binding.ivGroupImage.setPadding(0, 0, 0, 0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils.showSnackBar(this, String.valueOf(result.getError()));
             }
